@@ -56,6 +56,7 @@ int initOpenGLWindow(char *wndName)
 int main(int argc, char **argv)
 {
 	int quit = 0;
+	unsigned int key[256];
 	const GLubyte *vendor, *renderer, *oglVersion, *glslVersion;
 	RenderObject lines, triangle, rectangle, circle, stern;	
 
@@ -83,9 +84,11 @@ int main(int argc, char **argv)
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glClearColor(0.0f,0.0f,0.0f,1.0f);
+
 	while(!quit)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
+		//Ansichten mit F1 F2 usw. umschalten
 		drawObj(&lines);
 		drawObj(&triangle);
 		drawObj(&rectangle);
@@ -94,25 +97,20 @@ int main(int argc, char **argv)
 		glXSwapBuffers(dpy, win);
 
 		XNextEvent(dpy, &xev);
-		if(xev.type == KeyPress)
-		{			
-			switch (xev.xkey.keycode)
-			{
-				case 9:
-					glXMakeCurrent(dpy, None, NULL);
-					glXDestroyContext(dpy, glc);
-					XDestroyWindow(dpy, win);
-					XCloseDisplay(dpy);
-					quit = 1;
-					break;
-				case 111:
-					stern.rotZ += 0.05;
-					break;
-				case 116:
-					stern.rotZ -= 0.05;
-					break;
-			}
-		}		
+		if (xev.type == KeyPress) key[xev.xkey.keycode] = 1;
+		else if (xev.type == KeyRelease) key[xev.xkey.keycode] = 0;
+
+		if (key[9])
+		{
+			glXMakeCurrent(dpy, None, NULL);
+			glXDestroyContext(dpy, glc);
+			XDestroyWindow(dpy, win);
+			XCloseDisplay(dpy);
+			quit = 1;
+		}
+
+		if (key[111]) stern.rotZ += 0.1;				
+		if (key[116]) stern.rotZ -= 0.1;			
 	}
 
 	return 0;
