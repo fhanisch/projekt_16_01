@@ -9,8 +9,8 @@
 
 void initLines(RenderObject *lines)
 {			
-	GLchar vertex_shader_filename[] = "src/shader/generic.vert";
-	GLchar fragment_shader_filename[] = "src/shader/generic.frag";
+	GLchar vertex_shader_filename[] = "src/shader/generic.vs";
+	GLchar fragment_shader_filename[] = "src/shader/generic.fs";
 	GLfloat vertices[] = {	 0.0f,-1.0f, 0.0f,
 			 	-1.0f, 0.0f, 0.0f,
 			 	 0.0f, 1.0f, 0.0f,
@@ -34,8 +34,8 @@ void initLines(RenderObject *lines)
 
 void initTriangle(RenderObject *triangle)
 {			
-	GLchar vertex_shader_filename[] = "src/shader/generic.vert";
-	GLchar fragment_shader_filename[] = "src/shader/generic.frag";
+	GLchar vertex_shader_filename[] = "src/shader/generic.vs";
+	GLchar fragment_shader_filename[] = "src/shader/generic.fs";
 	GLfloat vertices[] = {	-1.0f,-1.0f, 0.0f,
 			 	 1.0f,-1.0f, 0.0f,
 			 	 0.0f, 1.0f, 0.0f};
@@ -58,8 +58,8 @@ void initTriangle(RenderObject *triangle)
 
 void initRectangle(RenderObject *rect)
 {			
-	GLchar vertex_shader_filename[] = "src/shader/generic.vert";
-	GLchar fragment_shader_filename[] = "src/shader/generic.frag";
+	GLchar vertex_shader_filename[] = "src/shader/generic.vs";
+	GLchar fragment_shader_filename[] = "src/shader/generic.fs";
 	GLfloat vertices[] = {	-1.0f,-1.0f, 0.0f,
 			 	 1.0f,-1.0f, 0.0f,
 			 	-1.0f, 1.0f, 0.0f,
@@ -83,8 +83,8 @@ void initRectangle(RenderObject *rect)
 
 void initCircle(RenderObject *circle)
 {			
-	GLchar vertex_shader_filename[] = "src/shader/circle.vert";
-	GLchar fragment_shader_filename[] = "src/shader/generic.frag";
+	GLchar vertex_shader_filename[] = "src/shader/circle.vs";
+	GLchar fragment_shader_filename[] = "src/shader/generic.fs";
 	
 	circle->vertex_shader_filename = vertex_shader_filename;	
 	circle->fragment_shader_filename = fragment_shader_filename;
@@ -104,8 +104,8 @@ void initCircle(RenderObject *circle)
 
 void initStern(RenderObject *stern)
 {			
-	GLchar vertex_shader_filename[] = "src/shader/generic.vert";
-	GLchar fragment_shader_filename[] = "src/shader/generic.frag";
+	GLchar vertex_shader_filename[] = "src/shader/generic.vs";
+	GLchar fragment_shader_filename[] = "src/shader/generic.fs";
 
 	GLfloat vertices[] = {	   0.0f,  -1.0f, 0.0f,
 			 	  0.25f, -0.25f, 0.0f,
