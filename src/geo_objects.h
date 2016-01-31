@@ -3,7 +3,6 @@
 
 void initLines(RenderObject *Lines);
 void initTriangle(RenderObject *triangle);
-void drawObj(RenderObject *r);
 void initRectangle(RenderObject *rect);
 void initCircle(RenderObject *rect);
 void initStern(RenderObject *stern);

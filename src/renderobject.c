@@ -92,3 +92,74 @@ unsigned int *veci(unsigned int start, unsigned int count)
 
 	return out;
 }
+
+void initObj(RenderObject *r)
+{
+	loadShader(&r->vertex_shader_text, r->vertex_shader_filename);
+	loadShader(&r->fragment_shader_text, r->fragment_shader_filename);
+	r->vertexShader = createShader(GL_VERTEX_SHADER, r->vertex_shader_text);
+	printf("vertexShader %i\n",r->vertexShader);
+	r->fragmentShader = createShader(GL_FRAGMENT_SHADER, r->fragment_shader_text);
+	printf("fragmentShader %i\n",r->fragmentShader);
+	r->shaderProgram = createShaderProgram(r->vertexShader, r->fragmentShader);
+	printf("shaderProgram %i\n",r->shaderProgram);
+
+	if (r->verticesSize!=0)	
+	{
+		createVBO(&r->vboID,r->verticesSize,r->vertices);
+		printf("vboID: %i\n",r->vboID);
+		printf("Size of Vertices: %d\n",r->verticesSize);
+	}
+	else
+	{
+		createVBO(&r->uID,r->uSize,r->u);
+		printf("uID: %i\n",r->uID);
+		printf("Size of u: %d\n",r->uSize);		
+	}
+	createIBO(&r->iboID, r->indicesSize, r->indices);
+	printf("iboID: %i\n",r->iboID);
+	printf("Size of Indices: %d\n",r->indicesSize);
+
+	r->colorHandle = glGetUniformLocation(r->shaderProgram,"color");
+	r->vTransHandle = glGetUniformLocation(r->shaderProgram,"vTrans");
+	r->scaleHandle = glGetUniformLocation(r->shaderProgram,"vScale");
+	r->rotZHandle = glGetUniformLocation(r->shaderProgram,"rotZ");
+	
+	if (r->verticesSize!=0)	
+	{
+		r->vertexHandle = glGetAttribLocation(r->shaderProgram,"vertex");
+		printf("vertexHandle %i\n", r->vertexHandle);
+	}
+	else
+	{
+		r->uHandle = glGetAttribLocation(r->shaderProgram,"u");
+		printf("uHandle %i\n", r->uHandle);
+	}
+}
+
+void drawObj(RenderObject *r)
+{
+	glUseProgram(r->shaderProgram);
+
+	glUniform4fv(r->colorHandle,1, (GLfloat*)&r->color);
+	glUniform3fv(r->vTransHandle,1, (GLfloat*)&r->vPos);
+	glUniform3fv(r->scaleHandle,1, (GLfloat*)&r->vScale);
+	glUniform1f(r->rotZHandle, r->rotZ);	
+	
+	if (r->verticesSize!=0)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, r->vboID);
+		glEnableVertexAttribArray(r->vertexHandle);
+		glVertexAttribPointer(r->vertexHandle, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	}
+	else
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, r->uID);
+		glEnableVertexAttribArray(r->uHandle);
+		glVertexAttribPointer(r->uHandle, 1, GL_FLOAT, GL_FALSE, 0, 0);
+	}
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, r->iboID);
+	glDrawElements(r->renderMode, r->indicesLen, GL_UNSIGNED_INT, 0);
+}
+

@@ -48,3 +48,5 @@ Color getColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
 Vector3 vec3(float x, float y, float z);
 float *vecf(float start, float step, unsigned int count);
 unsigned int *veci(unsigned int start, unsigned int count);
+void initObj(RenderObject *r);
+void drawObj(RenderObject *r);
