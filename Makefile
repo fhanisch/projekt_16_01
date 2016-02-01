@@ -1,4 +1,4 @@
-LIB = -lX11 -lGL -lGLEW
+LIB = -lSDL -lGL -lGLEW
 OBJ = build/main.o build/renderobject.o build/geo_objects.o
 
 projekt_16_01: $(OBJ)
@@ -12,4 +12,7 @@ build/renderobject.o: src/renderobject.c src/renderobject.h
 
 build/geo_objects.o: src/geo_objects.c src/geo_objects.h
 	gcc -c src/geo_objects.c -o $@
+
+clean:
+	rm build/*.o
 

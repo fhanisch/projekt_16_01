@@ -3,52 +3,26 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/Xlib.h>
+#include <SDL/SDL.h>
 #include "ogl.h"
 #include "renderobject.h"
 #include "geo_objects.h"
 
-Display			*dpy;
-Window			root;
-GLint			att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
-XVisualInfo		*vi;
-Colormap		cmap;
-XSetWindowAttributes	swa;
-Window                  win;
-GLXContext              glc;
-XEvent                  xev;
-
+SDL_Event event;
 
 int initOpenGLWindow(char *wndName)
-{
-	dpy = XOpenDisplay(NULL);
-	if(dpy == NULL)
-	{
-        	printf("\n\tcannot connect to X server\n\n");
-        	return 1;
-	 }
-	root = DefaultRootWindow(dpy);
-	vi = glXChooseVisual(dpy, 0, att);
-	if(vi == NULL)
-	{
-        	printf("\n\tno appropriate visual found\n\n");
-	        return 1;
-	} 
-	else
-	{
-        	printf("\n\tvisual %p selected\n", (void *)vi->visualid);
-	}
+{	
+	SDL_Init(SDL_INIT_VIDEO);
 
-	cmap = XCreateColormap(dpy, root, vi->visual, AllocNone);
-	swa.colormap = cmap;
-	swa.event_mask = ExposureMask | KeyPressMask;
+	SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
+	SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE,8 );
+    	SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
+	SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
+    	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 24 );
+	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 0 );
 
-	win = XCreateWindow(dpy, root, 0, 0, 600, 600, 0, vi->depth, InputOutput, vi->visual, CWColormap | CWEventMask, &swa);
-	XMapWindow(dpy, win);
-	XStoreName(dpy, win, wndName);
-
-	glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
-	glXMakeCurrent(dpy, win, glc);
+	SDL_SetVideoMode(600,600,32,SDL_OPENGL);
+	SDL_WM_SetCaption(wndName, NULL);
 
 	return 0;
 }
@@ -61,6 +35,7 @@ int main(int argc, char **argv)
 	RenderObject lines, triangle, rectangle, circle, stern;	
 
 	printf("Programm: %s\n",argv[0]+2);
+	memset(key,0,sizeof(key));
 	
 	if (initOpenGLWindow(argv[0]+2)!=0) return 1;
 	if (glewInit()!=0) return 1;
@@ -94,24 +69,31 @@ int main(int argc, char **argv)
 		drawObj(&rectangle);
 		drawObj(&circle);
 		drawObj(&stern);		
-		glXSwapBuffers(dpy, win);
+		
+		SDL_GL_SwapBuffers();		
 
-		XNextEvent(dpy, &xev);
-		if (xev.type == KeyPress) key[xev.xkey.keycode] = 1;
-		else if (xev.type == KeyRelease) key[xev.xkey.keycode] = 0;
-
-		if (key[9])
+		while(SDL_PollEvent(&event))
 		{
-			glXMakeCurrent(dpy, None, NULL);
-			glXDestroyContext(dpy, glc);
-			XDestroyWindow(dpy, win);
-			XCloseDisplay(dpy);
-			quit = 1;
-		}
-
-		if (key[111]) stern.rotZ += 0.1;				
-		if (key[116]) stern.rotZ -= 0.1;			
+			switch(event.type)
+			{
+				case SDL_QUIT: 
+					quit=1;
+					break;
+				case SDL_KEYDOWN:
+					key[event.key.keysym.sym] = 1;
+					break;
+				case SDL_KEYUP:
+					key[event.key.keysym.sym] = 0;
+					break;
+			}
+		}	
+		
+		if (key[SDLK_LEFT]) stern.rotZ += 0.01;				
+		if (key[SDLK_RIGHT]) stern.rotZ -= 0.01;
+		SDL_Delay(5);
 	}
+	
+	SDL_Quit();
 
 	return 0;
 }
