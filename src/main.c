@@ -4,7 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL/SDL.h>
-#include "ogl.h"
+#include <GL/glew.h>
+#include <GL/gl.h>
+//#include <GL/glu.h>
 #include "renderobject.h"
 #include "geo_objects.h"
 
@@ -58,11 +60,16 @@ int main(int argc, char **argv)
 	
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 	glClearColor(0.0f,0.0f,0.0f,1.0f);
+	glClearDepthf(1.0f);
 
 	while(!quit)
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//Ansichten mit F1 F2 usw. umschalten
 		drawObj(&lines);
 		drawObj(&triangle);

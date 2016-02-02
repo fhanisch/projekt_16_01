@@ -2,8 +2,10 @@
 //Erstellt: 31.01.2016
 
 #include <stdio.h>
-//#include <string.h>
-#include "ogl.h"
+#include <string.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
+//#include <GL/glu.h>
 #include "renderobject.h"
 #include "geo_objects.h"
 
@@ -131,5 +133,35 @@ void initStern(RenderObject *stern)
 	stern->rotZ = 0.0f;
 	stern->renderMode = GL_TRIANGLES;
 	initObj(stern);
+}
+
+void initPlane(RenderObject *plane)
+{
+	GLchar vertex_shader_filename[] = "src/shader/generic.vs";
+	GLchar fragment_shader_filename[] = "src/shader/generic.fs";
+	GLfloat vertices[] = {	-1.0f, 0.0f, -1.0f,
+			 	 1.0f, 0.0f, -1.0f,
+			 	-1.0f, 0.0f,  1.0f,
+				 1.0f, 0.0f,  1.0f};
+	GLuint indices[] = {0,1,2,3};
+	
+	plane->vertex_shader_filename = vertex_shader_filename;	
+	plane->fragment_shader_filename = fragment_shader_filename;
+	plane->vertices = vertices;
+	plane->verticesSize = sizeof(vertices);
+	plane->indices = indices;
+	plane->indicesLen = 4;
+	plane->indicesSize = sizeof(indices);
+	plane->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);
+	plane->vPos = vec3(0.5f, -0.5f, 0.0f);
+	plane->vScale = vec3(0.25f, 0.25f, 0.25f);
+	plane->rotZ = 0.0f;
+	plane->renderMode = GL_TRIANGLE_STRIP;
+	initObj(plane);
+}
+
+void initQube(RenderObject *cube)
+{
+
 }
 

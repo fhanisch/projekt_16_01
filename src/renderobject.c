@@ -3,7 +3,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "ogl.h"
+#include <string.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
+//#include <GL/glu.h>
 #include "renderobject.h"
 
 int loadShader(GLchar **shaderStr, char *fileName)
@@ -91,6 +94,43 @@ unsigned int *veci(unsigned int start, unsigned int count)
 	for (i=0;i<count;i++) out[i] = start + i;
 
 	return out;
+}
+
+Matrix4 identity()
+{
+	Matrix4 I;
+	memset(&I,0,sizeof(Matrix4));
+	I.m11 = 1.0f;
+	I.m22 = 1.0f;
+	I.m33 = 1.0f;
+	I.m44 = 1.0f;
+	printf("Size of Matrix4: %ld\n", sizeof(Matrix4));
+
+	return I;
+}
+
+Matrix4 setFrustum(float r, float t, float n, float f)
+{
+	Matrix4 F;
+	memset(&F,0,sizeof(Matrix4));
+
+	F.m11=n/r;	F.m12=0;	F.m13=0;		F.m14=0;
+	F.m21=0;	F.m22=n/t;	F.m23=0;		F.m24=0;
+	F.m31=0;	F.m32=0;	F.m33=-(f+n)/(f-n);	F.m34=-2*f*n/(f-n);
+	F.m41=0;	F.m42=0;	F.m43=-1;		F.m44=0;
+
+	return F;
+}
+
+void setPixel(GLubyte *tex, int xSize, int x, int y)
+{
+	GLubyte value = 255;
+	uint pixelPtr;
+
+	pixelPtr = (y*xSize+x)*4;
+	tex[pixelPtr] = 0;
+	tex[pixelPtr+1] = value;
+	tex[pixelPtr+2] = 0;
 }
 
 void initObj(RenderObject *r)
