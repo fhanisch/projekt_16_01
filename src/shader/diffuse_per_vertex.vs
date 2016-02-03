@@ -1,15 +1,14 @@
 //vertex shader
-//Erstellt: 31.01.2016
+//Erstellt: 03.02.2016
 
 uniform mat4 mProj;
 uniform vec3 vTrans;
 uniform vec3 vScale;
 uniform float rotZ;
-in float u;
+in vec3 vertex;
 
 void main()
 {
-	float x,y;
 	mat4 mTrans = mat4(1.0);
 	mat4 mScale = mat4(1.0);
 	mat4 mRot = mat4(1.0);
@@ -25,9 +24,10 @@ void main()
 	mRot[0].y=sin(rotZ);
 	mRot[1].y=cos(rotZ);
 
-	x = cos(u*2*3.14159/100.0);
-	y = -sin(u*2*3.14159/100.0);
+	vec3 lightPosition = vec3(1.0, 1.0, 1.0);
+	vec3 normal = vec3(0.0, 1.0, 0.0);
+	vec3 s = normalize(lightPosition - vertex.xyz);
 
-	gl_Position = mProj * mTrans * mRot * mScale * vec4(x, y, 0.0, 1.0);
+	gl_Position = mProj * mTrans * mRot * mScale * vec4(vertex,1.0);
 }
 

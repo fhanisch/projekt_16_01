@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 	int quit = 0;
 	unsigned int key[256];
 	const GLubyte *vendor, *renderer, *oglVersion, *glslVersion;
-	RenderObject lines, triangle, rectangle, circle, stern;	
+	RenderObject lines, triangle, rectangle, circle, stern, plane;	
 
 	printf("Programm: %s\n",argv[0]+2);
 	memset(key,0,sizeof(key));
@@ -57,6 +57,7 @@ int main(int argc, char **argv)
 	initRectangle(&rectangle);
 	initCircle(&circle);
 	initStern(&stern);
+	initPlane(&plane);
 	
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -71,11 +72,14 @@ int main(int argc, char **argv)
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//Ansichten mit F1 F2 usw. umschalten
+		/*
 		drawObj(&lines);
 		drawObj(&triangle);
 		drawObj(&rectangle);
 		drawObj(&circle);
-		drawObj(&stern);		
+		drawObj(&stern);
+		*/
+		drawObj(&plane);	
 		
 		SDL_GL_SwapBuffers();		
 

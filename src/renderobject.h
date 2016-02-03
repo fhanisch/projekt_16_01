@@ -32,7 +32,7 @@ typedef struct
 typedef struct
 {
 	GLuint vertexShader, fragmentShader, shaderProgram, vboID, iboID, uID, vertexHandle, uHandle;
-	GLint colorHandle, vTransHandle, scaleHandle, rotZHandle;
+	GLint mProjHandle, colorHandle, vTransHandle, scaleHandle, rotZHandle;
 	GLenum renderMode;
 	GLchar *vertex_shader_filename, *fragment_shader_filename;
 	GLchar *vertex_shader_text, *fragment_shader_text;
@@ -59,6 +59,6 @@ float *vecf(float start, float step, unsigned int count);
 unsigned int *veci(unsigned int start, unsigned int count);
 Matrix4 identity();
 Matrix4 setFrustum(float r, float t, float n, float f);
-void setPixel(GLubyte *tex, int xSize, int x, int y);
+void setPixel(GLubyte *tex, int xSize, int x, int y, Color c);
 void initObj(RenderObject *r);
 void drawObj(RenderObject *r);

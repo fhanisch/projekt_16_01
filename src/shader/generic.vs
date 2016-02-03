@@ -1,6 +1,7 @@
 //vertex shader
 //Erstellt: 30.01.2016
 
+uniform mat4 mProj;
 uniform vec3 vTrans;
 uniform vec3 vScale;
 uniform float rotZ;
@@ -23,6 +24,6 @@ void main()
 	mRot[0].y=sin(rotZ);
 	mRot[1].y=cos(rotZ);
 
-	gl_Position = mTrans * mRot * mScale * vec4(vertex,1.0);
+	gl_Position = mProj * mTrans * mRot * mScale * vec4(vertex,1.0);
 }
 

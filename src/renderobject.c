@@ -103,8 +103,7 @@ Matrix4 identity()
 	I.m11 = 1.0f;
 	I.m22 = 1.0f;
 	I.m33 = 1.0f;
-	I.m44 = 1.0f;
-	printf("Size of Matrix4: %ld\n", sizeof(Matrix4));
+	I.m44 = 1.0f;	
 
 	return I;
 }
@@ -122,10 +121,10 @@ Matrix4 setFrustum(float r, float t, float n, float f)
 	return F;
 }
 
-void setPixel(GLubyte *tex, int xSize, int x, int y)
+void setPixel(GLubyte *tex, int xSize, int x, int y, Color c)
 {
 	GLubyte value = 255;
-	uint pixelPtr;
+	unsigned int pixelPtr;
 
 	pixelPtr = (y*xSize+x)*4;
 	tex[pixelPtr] = 0;
@@ -160,6 +159,7 @@ void initObj(RenderObject *r)
 	printf("iboID: %i\n",r->iboID);
 	printf("Size of Indices: %d\n",r->indicesSize);
 
+	r->mProjHandle = glGetUniformLocation(r->shaderProgram,"mProj");
 	r->colorHandle = glGetUniformLocation(r->shaderProgram,"color");
 	r->vTransHandle = glGetUniformLocation(r->shaderProgram,"vTrans");
 	r->scaleHandle = glGetUniformLocation(r->shaderProgram,"vScale");
@@ -181,6 +181,7 @@ void drawObj(RenderObject *r)
 {
 	glUseProgram(r->shaderProgram);
 
+	glUniformMatrix4fv(r->mProjHandle,1, GL_TRUE, (GLfloat*)&r->mProj);
 	glUniform4fv(r->colorHandle,1, (GLfloat*)&r->color);
 	glUniform3fv(r->vTransHandle,1, (GLfloat*)&r->vPos);
 	glUniform3fv(r->scaleHandle,1, (GLfloat*)&r->vScale);
