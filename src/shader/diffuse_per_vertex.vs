@@ -1,11 +1,15 @@
 //vertex shader
 //Erstellt: 03.02.2016
 
+#version 440
+
 uniform mat4 mProj;
 uniform vec3 vTrans;
 uniform vec3 vScale;
 uniform float rotZ;
+
 in vec3 vertex;
+out float lightIntensity;
 
 void main()
 {
@@ -26,7 +30,8 @@ void main()
 
 	vec3 lightPosition = vec3(1.0, 1.0, 1.0);
 	vec3 normal = vec3(0.0, 1.0, 0.0);
-	vec3 s = normalize(lightPosition - vertex.xyz);
+	vec3 s = normalize(lightPosition - vertex);
+	lightIntensity = max(dot(s,normal), 0.0);	
 
 	gl_Position = mProj * mTrans * mRot * mScale * vec4(vertex,1.0);
 }

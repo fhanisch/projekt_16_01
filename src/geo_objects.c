@@ -142,8 +142,8 @@ void initStern(RenderObject *stern)
 
 void initPlane(RenderObject *plane)
 {
-	GLchar vertex_shader_filename[] = "src/shader/generic.vs";
-	GLchar fragment_shader_filename[] = "src/shader/generic.fs";
+	GLchar vertex_shader_filename[] = "src/shader/diffuse_per_vertex.vs";
+	GLchar fragment_shader_filename[] = "src/shader/diffuse_per_vertex.fs";
 	GLfloat vertices[] = {	-1.0f, 0.0f, -1.0f,
 			 	 1.0f, 0.0f, -1.0f,
 			 	-1.0f, 0.0f,  1.0f,
