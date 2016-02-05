@@ -17,11 +17,9 @@ int loadShader(GLchar **shaderStr, char *fileName)
 
 	fseek(file,0,SEEK_END);
 	filesize=ftell(file);
-	rewind(file);
-	printf("File Size: %i\n",filesize);
+	rewind(file);	
 	*shaderStr = malloc(filesize+1);
-	readElements = fread(*shaderStr,filesize,1,file);
-	printf("Elements read: %i\n",readElements);
+	readElements = fread(*shaderStr,filesize,1,file);	
 	(*shaderStr)[filesize]='\0';
 	fclose(file);
 
@@ -143,18 +141,27 @@ void initObj(RenderObject *r)
 	r->shaderProgram = createShaderProgram(r->vertexShader, r->fragmentShader);
 	printf("shaderProgram %i\n",r->shaderProgram);
 
-	if (r->verticesSize!=0)	
+	if (r->vertices!=NULL)	
 	{
 		createVBO(&r->vboID,r->verticesSize,r->vertices);
 		printf("vboID: %i\n",r->vboID);
 		printf("Size of Vertices: %d\n",r->verticesSize);
 	}
-	else
+
+	if(r->u!=NULL)
 	{
 		createVBO(&r->uID,r->uSize,r->u);
 		printf("uID: %i\n",r->uID);
 		printf("Size of u: %d\n",r->uSize);		
 	}
+
+	if(r->normals!=NULL)
+	{
+		createVBO(&r->nboID, r->normalsSize, r->normals);
+		printf("nboID: %i\n",r->nboID);
+		printf("Size of normals: %d\n",r->normalsSize);
+	}
+
 	createIBO(&r->iboID, r->indicesSize, r->indices);
 	printf("iboID: %i\n",r->iboID);
 	printf("Size of Indices: %d\n",r->indicesSize);
@@ -163,18 +170,7 @@ void initObj(RenderObject *r)
 	r->colorHandle = glGetUniformLocation(r->shaderProgram,"color");
 	r->vTransHandle = glGetUniformLocation(r->shaderProgram,"vTrans");
 	r->scaleHandle = glGetUniformLocation(r->shaderProgram,"vScale");
-	r->rotZHandle = glGetUniformLocation(r->shaderProgram,"rotZ");
-	
-	if (r->verticesSize!=0)	
-	{
-		r->vertexHandle = glGetAttribLocation(r->shaderProgram,"vertex");
-		printf("vertexHandle %i\n", r->vertexHandle);
-	}
-	else
-	{
-		r->uHandle = glGetAttribLocation(r->shaderProgram,"u");
-		printf("uHandle %i\n", r->uHandle);
-	}
+	r->rotZHandle = glGetUniformLocation(r->shaderProgram,"rotZ");	
 }
 
 void drawObj(RenderObject *r)
@@ -187,17 +183,25 @@ void drawObj(RenderObject *r)
 	glUniform3fv(r->scaleHandle,1, (GLfloat*)&r->vScale);
 	glUniform1f(r->rotZHandle, r->rotZ);	
 	
-	if (r->verticesSize!=0)
+	if (r->vertices!=NULL)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, r->vboID);
-		glEnableVertexAttribArray(r->vertexHandle);
-		glVertexAttribPointer(r->vertexHandle, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	}
-	else
+	
+	if(r->u!=NULL)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, r->uID);
-		glEnableVertexAttribArray(r->uHandle);
-		glVertexAttribPointer(r->uHandle, 1, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, 0, 0);
+	}
+
+	if(r->normals!=NULL)
+	{		
+		glBindBuffer(GL_ARRAY_BUFFER, r->nboID);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, r->iboID);

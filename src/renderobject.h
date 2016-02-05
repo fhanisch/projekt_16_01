@@ -31,13 +31,13 @@ typedef struct
 
 typedef struct
 {
-	GLuint vertexShader, fragmentShader, shaderProgram, vboID, iboID, uID, vertexHandle, uHandle;
+	GLuint vertexShader, fragmentShader, shaderProgram, vboID, nboID, iboID, uID;
 	GLint mProjHandle, colorHandle, vTransHandle, scaleHandle, rotZHandle;
 	GLenum renderMode;
 	GLchar *vertex_shader_filename, *fragment_shader_filename;
 	GLchar *vertex_shader_text, *fragment_shader_text;
-	GLfloat *vertices, *u;
-	GLuint verticesSize, uSize;
+	GLfloat *vertices, *normals, *u;
+	GLuint verticesSize, normalsSize, uSize;
 	GLuint *indices;
 	GLuint indicesLen;
 	GLuint indicesSize;

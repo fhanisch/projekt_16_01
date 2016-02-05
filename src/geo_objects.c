@@ -21,6 +21,8 @@ void initLines(RenderObject *lines)
 	
 	lines->vertex_shader_filename = vertex_shader_filename;	
 	lines->fragment_shader_filename = fragment_shader_filename;
+	lines->normals = NULL;
+	lines->u = NULL;
 	lines->vertices = vertices;
 	lines->verticesSize = sizeof(vertices);
 	lines->indices = indices;
@@ -46,6 +48,8 @@ void initTriangle(RenderObject *triangle)
 	
 	triangle->vertex_shader_filename = vertex_shader_filename;	
 	triangle->fragment_shader_filename = fragment_shader_filename;
+	triangle->normals = NULL;
+	triangle->u = NULL;
 	triangle->vertices = vertices;
 	triangle->verticesSize = sizeof(vertices);
 	triangle->indices = indices;
@@ -72,6 +76,8 @@ void initRectangle(RenderObject *rect)
 	
 	rect->vertex_shader_filename = vertex_shader_filename;	
 	rect->fragment_shader_filename = fragment_shader_filename;
+	rect->normals = NULL;
+	rect->u = NULL;
 	rect->vertices = vertices;
 	rect->verticesSize = sizeof(vertices);
 	rect->indices = indices;
@@ -94,6 +100,8 @@ void initCircle(RenderObject *circle)
 	circle->vertex_shader_filename = vertex_shader_filename;	
 	circle->fragment_shader_filename = fragment_shader_filename;
 	circle->verticesSize=0;
+	circle->vertices = NULL;
+	circle->normals = NULL;
 	circle->u = vecf(0.0f, 1.0f, 100);
 	circle->uSize = 100*sizeof(GLfloat);
 	circle->indices = veci(0,100);
@@ -126,6 +134,8 @@ void initStern(RenderObject *stern)
 	
 	stern->vertex_shader_filename = vertex_shader_filename;	
 	stern->fragment_shader_filename = fragment_shader_filename;
+	stern->normals = NULL;
+	stern->u = NULL;
 	stern->vertices = vertices;
 	stern->verticesSize = sizeof(vertices);
 	stern->indices = indices;
@@ -148,12 +158,20 @@ void initPlane(RenderObject *plane)
 			 	 1.0f, 0.0f, -1.0f,
 			 	-1.0f, 0.0f,  1.0f,
 				 1.0f, 0.0f,  1.0f};
+
+	GLfloat normals[] = {	 0.0f, 1.0f,  0.0f,
+			 	 0.0f, 1.0f,  0.0f,
+			 	 0.0f, 1.0f,  0.0f,
+				 0.0f, 1.0f,  0.0f};
 	GLuint indices[] = {0,1,2,3};
 	
 	plane->vertex_shader_filename = vertex_shader_filename;	
 	plane->fragment_shader_filename = fragment_shader_filename;
+	plane->u = NULL;
 	plane->vertices = vertices;
 	plane->verticesSize = sizeof(vertices);
+	plane->normals = normals;
+	plane->normalsSize = sizeof(normals);
 	plane->indices = indices;
 	plane->indicesLen = 4;
 	plane->indicesSize = sizeof(indices);
@@ -166,8 +184,88 @@ void initPlane(RenderObject *plane)
 	initObj(plane);
 }
 
-void initQube(RenderObject *cube)
+void initCube(RenderObject *cube)
 {
+	GLchar vertex_shader_filename[] = "src/shader/diffuse_per_vertex.vs";
+	GLchar fragment_shader_filename[] = "src/shader/diffuse_per_vertex.fs";
+	GLfloat vertices[] = {	-1.0f, -1.0f, -1.0f,
+			 	 1.0f, -1.0f, -1.0f,
+			 	-1.0f, -1.0f,  1.0f,
+				 1.0f, -1.0f,  1.0f,
 
+				-1.0f,  1.0f, -1.0f,
+			 	 1.0f,  1.0f, -1.0f,
+			 	-1.0f,  1.0f,  1.0f,
+				 1.0f,  1.0f,  1.0f,
+
+				-1.0f, -1.0f,  1.0f,
+			 	 1.0f, -1.0f,  1.0f,
+			 	-1.0f,  1.0f,  1.0f,
+				 1.0f,  1.0f,  1.0f,
+
+				-1.0f, -1.0f, -1.0f,
+			 	 1.0f, -1.0f, -1.0f,
+			 	-1.0f,  1.0f, -1.0f,
+				 1.0f,  1.0f, -1.0f,
+
+				 1.0f, -1.0f, -1.0f,
+			 	 1.0f, -1.0f,  1.0f,
+			 	 1.0f,  1.0f, -1.0f,
+				 1.0f,  1.0f,  1.0f,
+
+				-1.0f, -1.0f, -1.0f,
+			 	-1.0f, -1.0f,  1.0f,
+			 	-1.0f,  1.0f, -1.0f,
+				-1.0f,  1.0f,  1.0f};
+
+	GLfloat normals[] = {	 0.0f, -1.0f,  0.0f,
+			 	 0.0f, -1.0f,  0.0f,
+			 	 0.0f, -1.0f,  0.0f,
+				 0.0f, -1.0f,  0.0f,
+
+				 0.0f,  1.0f,  0.0f,
+			 	 0.0f,  1.0f,  0.0f,
+			 	 0.0f,  1.0f,  0.0f,
+				 0.0f,  1.0f,  0.0f,
+
+				 0.0f,  0.0f,  1.0f,
+			 	 0.0f,  0.0f,  1.0f,
+			 	 0.0f,  0.0f,  1.0f,
+				 0.0f,  0.0f,  1.0f,
+
+				 0.0f,  0.0f, -1.0f,
+			 	 0.0f,  0.0f, -1.0f,
+			 	 0.0f,  0.0f, -1.0f,
+				 0.0f,  0.0f, -1.0f,
+
+				 1.0f,  0.0f,  0.0f,
+			 	 1.0f,  0.0f,  0.0f,
+			 	 1.0f,  0.0f,  0.0f,
+				 1.0f,  0.0f,  0.0f,
+
+				-1.0f,  0.0f,  0.0f,
+			 	-1.0f,  0.0f,  0.0f,
+			 	-1.0f,  0.0f,  0.0f,
+				-1.0f,  0.0f,  0.0f};
+
+	GLuint indices[] = {0,1,3,2, 4,5,7,6, 8,9,11,10, 12,13,15,14, 16,17,19,18, 20,21,23,22};
+	
+	cube->vertex_shader_filename = vertex_shader_filename;	
+	cube->fragment_shader_filename = fragment_shader_filename;
+	cube->u = NULL;
+	cube->vertices = vertices;
+	cube->verticesSize = sizeof(vertices);
+	cube->normals = normals;
+	cube->normalsSize = sizeof(normals);
+	cube->indices = indices;
+	cube->indicesLen = 24;
+	cube->indicesSize = sizeof(indices);
+	cube->mProj = setFrustum(0.25,0.25,0.5,100.0);
+	cube->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);
+	cube->vPos = vec3(-2.0f, -2.0f, -8.0f);
+	cube->vScale = vec3(1.0f, 1.0f, 1.0f);
+	cube->rotZ = 0.0f;
+	cube->renderMode = GL_QUADS;
+	initObj(cube);
 }
 

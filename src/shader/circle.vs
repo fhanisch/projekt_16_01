@@ -1,11 +1,14 @@
 //vertex shader
 //Erstellt: 31.01.2016
 
+#version 440
+
 uniform mat4 mProj;
 uniform vec3 vTrans;
 uniform vec3 vScale;
 uniform float rotZ;
-in float u;
+
+layout (location = 0) in float u;
 
 void main()
 {

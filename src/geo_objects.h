@@ -7,4 +7,4 @@ void initRectangle(RenderObject *rect);
 void initCircle(RenderObject *rect);
 void initStern(RenderObject *stern);
 void initPlane(RenderObject *plane);
-void initQube(RenderObject *cube);
+void initCube(RenderObject *cube);

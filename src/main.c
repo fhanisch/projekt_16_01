@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 	int quit = 0;
 	unsigned int key[256];
 	const GLubyte *vendor, *renderer, *oglVersion, *glslVersion;
-	RenderObject lines, triangle, rectangle, circle, stern, plane;	
+	RenderObject lines, triangle, rectangle, circle, stern, plane, cube;	
 
 	printf("Programm: %s\n",argv[0]+2);
 	memset(key,0,sizeof(key));
@@ -58,6 +58,7 @@ int main(int argc, char **argv)
 	initCircle(&circle);
 	initStern(&stern);
 	initPlane(&plane);
+	initCube(&cube);
 	
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -79,7 +80,8 @@ int main(int argc, char **argv)
 		drawObj(&circle);
 		drawObj(&stern);
 		*/
-		drawObj(&plane);	
+		//drawObj(&plane);
+		drawObj(&cube);
 		
 		SDL_GL_SwapBuffers();		
 
