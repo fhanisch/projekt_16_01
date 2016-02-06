@@ -115,6 +115,17 @@ Matrix4 identity()
 	return I;
 }
 
+Matrix4 scale(float x, float y, float z)
+{
+	Matrix4 S;
+	S = identity();
+	S.m11 = x;
+	S.m22 = y;
+	S.m33 = z;
+
+	return S;
+}
+
 Matrix4 translate(float x, float y, float z)
 {
 	Matrix4 T;
@@ -254,10 +265,8 @@ void initObj(RenderObject *r)
 
 	r->mProjHandle = glGetUniformLocation(r->shaderProgram,"mProj");
 	r->mViewHandle = glGetUniformLocation(r->shaderProgram,"mView");
-	r->colorHandle = glGetUniformLocation(r->shaderProgram,"color");
-	r->vTransHandle = glGetUniformLocation(r->shaderProgram,"vTrans");
-	r->scaleHandle = glGetUniformLocation(r->shaderProgram,"vScale");
-	r->rotZHandle = glGetUniformLocation(r->shaderProgram,"rotZ");	
+	r->mModelHandle = glGetUniformLocation(r->shaderProgram,"mModel");
+	r->colorHandle = glGetUniformLocation(r->shaderProgram,"color");		
 }
 
 void drawObj(RenderObject *r)
@@ -266,11 +275,9 @@ void drawObj(RenderObject *r)
 
 	glUniformMatrix4fv(r->mProjHandle,1, GL_TRUE, (GLfloat*)&r->mProj);
 	glUniformMatrix4fv(r->mViewHandle,1, GL_TRUE, (GLfloat*)&camera);
+	glUniformMatrix4fv(r->mModelHandle,1, GL_TRUE, (GLfloat*)&r->mModel);
 	glUniform4fv(r->colorHandle,1, (GLfloat*)&r->color);
-	glUniform3fv(r->vTransHandle,1, (GLfloat*)&r->vPos);
-	glUniform3fv(r->scaleHandle,1, (GLfloat*)&r->vScale);
-	glUniform1f(r->rotZHandle, r->rotZ);	
-	
+			
 	if (r->vertices!=NULL)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, r->vboID);

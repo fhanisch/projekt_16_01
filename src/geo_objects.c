@@ -29,10 +29,8 @@ void initLines(RenderObject *lines)
 	lines->indicesLen = 4;
 	lines->indicesSize = sizeof(indices);
 	lines->mProj = identity();
-	lines->color = getColor(1.0f, 0.0f, 0.0f, 1.0f);
-	lines->vPos = vec3(0.0f, 0.0f, 0.0f);
-	lines->vScale = vec3(1.0f, 1.0f, 1.0f);
-	lines->rotZ = 0.0f;
+	lines->mModel = scale(1.0f, 1.0f, 1.0f);
+	lines->color = getColor(1.0f, 0.0f, 0.0f, 1.0f);			
 	lines->renderMode = GL_LINES;
 	initObj(lines);
 }
@@ -56,10 +54,9 @@ void initTriangle(RenderObject *triangle)
 	triangle->indicesLen = 3;
 	triangle->indicesSize = sizeof(indices);
 	triangle->mProj = identity();
-	triangle->color = getColor(1.0f, 0.0f, 1.0f, 1.0f);
-	triangle->vPos = vec3(-0.5f, 0.5f, 0.0f);
-	triangle->vScale = vec3(0.25f, 0.25f, 0.25f);
-	triangle->rotZ = 0.0f;
+	triangle->mModel = scale(0.25f, 0.25f, 0.25f);
+	triangle->mModel = matMult(translate(-0.5f, 0.5f, 0.0f), triangle->mModel);
+	triangle->color = getColor(1.0f, 0.0f, 1.0f, 1.0f);			
 	triangle->renderMode = GL_TRIANGLES;
 	initObj(triangle);
 }
@@ -84,10 +81,9 @@ void initRectangle(RenderObject *rect)
 	rect->indicesLen = 4;
 	rect->indicesSize = sizeof(indices);
 	rect->mProj = identity();
-	rect->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);
-	rect->vPos = vec3(0.5f, -0.5f, 0.0f);
-	rect->vScale = vec3(0.25f, 0.25f, 0.25f);
-	rect->rotZ = 0.0f;
+	rect->mModel = scale(0.25f, 0.25f, 0.25f);
+	rect->mModel = matMult(translate(0.5f, -0.5f, 0.0f), rect->mModel);
+	rect->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);	
 	rect->renderMode = GL_TRIANGLE_STRIP;
 	initObj(rect);
 }
@@ -108,10 +104,9 @@ void initCircle(RenderObject *circle)
 	circle->indicesLen = 100;
 	circle->indicesSize = 100*sizeof(GLuint);
 	circle->mProj = identity();
-	circle->color = getColor(1.0f, 1.0f, 0.0f, 1.0f);
-	circle->vPos = vec3(-0.5f, -0.5f, 0.0f);
-	circle->vScale = vec3(0.25f, 0.25f, 0.25f);
-	circle->rotZ = 0.0f;
+	circle->mModel = scale(0.25f, 0.25f, 0.25f);
+	circle->mModel = matMult(translate(-0.5f, -0.5f, 0.0f), circle->mModel);
+	circle->color = getColor(1.0f, 1.0f, 0.0f, 1.0f);	
 	circle->renderMode = GL_POLYGON;
 	initObj(circle);
 }
@@ -142,10 +137,10 @@ void initStern(RenderObject *stern)
 	stern->indicesLen = 18;
 	stern->indicesSize = sizeof(indices);
 	stern->mProj = identity();
-	stern->color = getColor(0.0f, 0.0f, 1.0f, 1.0f);
-	stern->vPos = vec3(0.5f, 0.5f, 0.0f);
-	stern->vScale = vec3(0.35f, 0.35f, 0.35f);
-	stern->rotZ = 0.0f;
+	stern->mProj.m33 = -1.0;
+	stern->mModel = scale(0.35f, 0.35f, 0.35f);
+	stern->mModel = matMult(translate(0.5f, 0.5f, 0.1f), stern->mModel);
+	stern->color = getColor(0.0f, 0.0f, 1.0f, 1.0f);	
 	stern->renderMode = GL_TRIANGLES;
 	initObj(stern);
 }
@@ -176,10 +171,9 @@ void initPlane(RenderObject *plane)
 	plane->indicesLen = 4;
 	plane->indicesSize = sizeof(indices);
 	plane->mProj = setFrustum(0.25,0.25,0.5,100.0);
-	plane->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);
-	plane->vPos = vec3(0.0f, -1.0f, -5.0f);
-	plane->vScale = vec3(1.0f, 1.0f, 1.0f);
-	plane->rotZ = 0.0f;
+	plane->mModel = scale(20.0f, 20.0f, 20.0f);
+	plane->mModel = matMult(translate(0.0f, 0.0f, 0.0f), plane->mModel);
+	plane->color = getColor(1.0f, 1.0f, 1.0f, 1.0f);	
 	plane->renderMode = GL_TRIANGLE_STRIP;
 	initObj(plane);
 }
@@ -261,11 +255,9 @@ void initCube(RenderObject *cube)
 	cube->indicesLen = 24;
 	cube->indicesSize = sizeof(indices);
 	cube->mProj = setFrustum(0.25,0.25,0.5,100.0);
-	cube->mModel = identity();
-	cube->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);
-	cube->vPos = vec3(0.0f, 0.0f, -5.0f);
-	cube->vScale = vec3(1.0f, 1.0f, 1.0f);
-	cube->rotZ = 0.0f;
+	cube->mModel = scale(1.0f, 1.0f, 1.0f);
+	cube->mModel = matMult(translate(0.0f, 1.5f, -5.0f), cube->mModel);
+	cube->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);	
 	cube->renderMode = GL_QUADS;
 	initObj(cube);
 }

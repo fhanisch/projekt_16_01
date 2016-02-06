@@ -23,7 +23,7 @@ int initOpenGLWindow(char *wndName)
     	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 24 );
 	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 0 );
 
-	SDL_SetVideoMode(600,600,32,SDL_OPENGL);
+	SDL_SetVideoMode(800,800,32,SDL_OPENGL);
 	SDL_WM_SetCaption(wndName, NULL);
 
 	return 0;
@@ -33,6 +33,7 @@ int main(int argc, char **argv)
 {
 	int quit = 0;
 	unsigned int key[256];
+	unsigned int F1=1;
 	int mouseX = 0;
 	int mouseY = 0;
 	Vector3 rotAxis;
@@ -77,16 +78,20 @@ int main(int argc, char **argv)
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//Ansichten mit F1 F2 usw. umschalten
-		/*
-		drawObj(&lines);
-		drawObj(&triangle);
-		drawObj(&rectangle);
-		drawObj(&circle);
-		drawObj(&stern);
-		*/
-		//drawObj(&plane);
-		drawObj(&cube);
-		
+		if (!F1)
+		{
+			drawObj(&lines);
+			drawObj(&triangle);
+			drawObj(&rectangle);
+			drawObj(&circle);
+			drawObj(&stern);
+		}
+		else
+		{
+			drawObj(&plane);
+			drawObj(&cube);
+		}
+
 		SDL_GL_SwapBuffers();		
 
 		while(SDL_PollEvent(&event))
@@ -109,42 +114,49 @@ int main(int argc, char **argv)
 			}
 		}	
 		
-		//if (key[SDLK_LEFT]) stern.rotZ += 0.01;				
-		//if (key[SDLK_RIGHT]) stern.rotZ -= 0.01;
-		if (key[SDLK_w]) camera = matMult(translate(0.0, 0.0, 0.01), camera);
-		if (key[SDLK_s]) camera = matMult(translate(0.0, 0.0, -0.01), camera);
-		if (key[SDLK_a]) camera = matMult(translate(0.01, 0.0, 0.0), camera);
-		if (key[SDLK_d]) camera = matMult(translate(-0.01, 0.0, 0.0), camera);
-		if (key[SDLK_y])
+		if (!F1)
 		{
-			rotAxis = cross(getXAxis(camera),getZAxis(camera));
-			camera = matMult(translate(rotAxis.x*0.01,rotAxis.y*0.01,rotAxis.z*0.01), camera);
+			if (key[SDLK_LEFT]) stern.mModel = matMult(rotateZ(0.01), stern.mModel);
+			if (key[SDLK_RIGHT]) stern.mModel = matMult(rotateZ(-0.01), stern.mModel);
 		}
-		if (key[SDLK_x])
-		{
-			rotAxis = cross(getXAxis(camera),getZAxis(camera));
-			camera = matMult(translate(rotAxis.x*-0.01,rotAxis.y*-0.01,rotAxis.z*-0.01), camera);
+		else
+		{			
+			if (key[SDLK_w]) camera = matMult(translate(0.0, 0.0, 0.01), camera);
+			if (key[SDLK_s]) camera = matMult(translate(0.0, 0.0, -0.01), camera);
+			if (key[SDLK_a]) camera = matMult(translate(0.01, 0.0, 0.0), camera);
+			if (key[SDLK_d]) camera = matMult(translate(-0.01, 0.0, 0.0), camera);
+			if (key[SDLK_y])
+			{
+				rotAxis = cross(getXAxis(camera),getZAxis(camera));
+				camera = matMult(translate(rotAxis.x*0.01,rotAxis.y*0.01,rotAxis.z*0.01), camera);
+			}
+			if (key[SDLK_x])
+			{
+				rotAxis = cross(getXAxis(camera),getZAxis(camera));
+				camera = matMult(translate(rotAxis.x*-0.01,rotAxis.y*-0.01,rotAxis.z*-0.01), camera);
+			}
+			if (key[SDLK_LEFT])
+			{
+				rotAxis = cross(getXAxis(camera),getZAxis(camera));
+				camera = matMult(rotateX(rotAxis.x*0.005), camera);
+				camera = matMult(rotateY(rotAxis.y*0.005), camera);
+				camera = matMult(rotateZ(rotAxis.z*-0.005), camera);
+			}
+			if (key[SDLK_RIGHT])
+			{
+				rotAxis = cross(getXAxis(camera),getZAxis(camera));
+				camera = matMult(rotateX(rotAxis.x*-0.005), camera);
+				camera = matMult(rotateY(rotAxis.y*-0.005), camera);
+				camera = matMult(rotateZ(rotAxis.z*0.005), camera);
+			}
+			if (key[SDLK_UP]) camera = matMult(rotateX(-0.005), camera);
+			if (key[SDLK_DOWN]) camera = matMult(rotateX(0.005), camera);
+			
+			//camera = matMult(rotateY(mouseX/600.0f),camera);		
+			//camera = matMult(rotateX(mouseY/600.0f),camera);
+			//mouseX=0;
+			//mouseY=0;
 		}
-		if (key[SDLK_LEFT])
-		{
-			rotAxis = cross(getXAxis(camera),getZAxis(camera));
-			camera = matMult(rotateX(rotAxis.x*0.005), camera);
-			camera = matMult(rotateY(rotAxis.y*0.005), camera);
-			camera = matMult(rotateZ(rotAxis.z*-0.005), camera);
-		}
-		if (key[SDLK_RIGHT])
-		{
-			rotAxis = cross(getXAxis(camera),getZAxis(camera));
-			camera = matMult(rotateX(rotAxis.x*-0.005), camera);
-			camera = matMult(rotateY(rotAxis.y*-0.005), camera);
-			camera = matMult(rotateZ(rotAxis.z*0.005), camera);
-		}
-		if (key[SDLK_UP]) camera = matMult(rotateX(-0.005), camera);
-		if (key[SDLK_DOWN]) camera = matMult(rotateX(0.005), camera);
-		//camera = matMult(rotateY(mouseX/600.0f),camera);		
-		//camera = matMult(rotateX(mouseY/600.0f),camera);
-		//mouseX=0;
-		//mouseY=0;
 
 		SDL_Delay(2);
 	}

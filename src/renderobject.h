@@ -32,7 +32,7 @@ typedef struct
 typedef struct
 {
 	GLuint vertexShader, fragmentShader, shaderProgram, vboID, nboID, iboID, uID;
-	GLint mProjHandle, mViewHandle, colorHandle, vTransHandle, scaleHandle, rotZHandle;
+	GLint mProjHandle, mViewHandle, mModelHandle, colorHandle;
 	GLenum renderMode;
 	GLchar *vertex_shader_filename, *fragment_shader_filename;
 	GLchar *vertex_shader_text, *fragment_shader_text;
@@ -42,10 +42,8 @@ typedef struct
 	GLuint indicesLen;
 	GLuint indicesSize;
 	Matrix4 mProj;
-	Matrix4 mModel;
-	Vector3 vPos;
-	Vector3 vScale;
-	GLfloat rotZ;
+	Matrix4 mView;
+	Matrix4 mModel;		
 	Color color;
 } RenderObject;
 
@@ -62,6 +60,7 @@ float *vecf(float start, float step, unsigned int count);
 unsigned int *veci(unsigned int start, unsigned int count);
 Vector3 cross(Vector3 v1, Vector3 v2);
 Matrix4 identity();
+Matrix4 scale(float x, float y, float z);
 Matrix4 translate(float x, float y, float z);
 Matrix4 rotateX(float phi);
 Matrix4 rotateY(float phi);
