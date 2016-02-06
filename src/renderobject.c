@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include <GL/glew.h>
 #include <GL/gl.h>
 //#include <GL/glu.h>
@@ -94,6 +95,14 @@ unsigned int *veci(unsigned int start, unsigned int count)
 	return out;
 }
 
+Vector3 cross(Vector3 v1, Vector3 v2)
+{
+	float *a=(float*)&v1;
+	float *b=(float*)&v2;
+
+	return vec3(a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]);
+}
+
 Matrix4 identity()
 {
 	Matrix4 I;
@@ -104,6 +113,83 @@ Matrix4 identity()
 	I.m44 = 1.0f;	
 
 	return I;
+}
+
+Matrix4 translate(float x, float y, float z)
+{
+	Matrix4 T;
+	T = identity();
+	T.m14 = x;
+	T.m24 = y;
+	T.m34 = z;
+
+	return T;
+}
+
+Matrix4 rotateX(float phi)
+{
+	Matrix4 X;
+	memset(&X,0,sizeof(Matrix4));
+	X.m11 = 1.0f;
+	X.m22 = cos(phi); X.m23 = sin(phi);	
+	X.m32 = -sin(phi); X.m33 = cos(phi);
+	X.m44 = 1.0f;
+
+	return X;
+}
+
+Matrix4 rotateY(float phi)
+{
+	Matrix4 Y;
+	memset(&Y,0,sizeof(Matrix4));
+	Y.m11 = cos(phi); Y.m13 = sin(phi);
+	Y.m22 = 1.0f;
+	Y.m31 = -sin(phi); Y.m33 = cos(phi);
+	Y.m44 = 1.0f;
+
+	return Y;
+}
+
+Matrix4 rotateZ(float phi)
+{
+	Matrix4 Z;
+	memset(&Z,0,sizeof(Matrix4));
+	Z.m11 = cos(phi); Z.m12 = sin(phi);	
+	Z.m21 = -sin(phi); Z.m22 = cos(phi);
+	Z.m33 = 1.0f;
+	Z.m44 = 1.0f;
+
+	return Z;
+}
+
+Matrix4 matMult(Matrix4 L, Matrix4 R)
+{
+	Matrix4 M;
+	float *m = (float*)&M;
+	float *l = (float*)&L;
+	float *r = (float*)&R;
+	unsigned int i,j;
+	
+	for (j=0;j<4;j++)
+		for (i=0;i<4;i++)
+			m[4*j+i] = l[4*j]*r[i] + l[4*j+1]*r[i+4] + l[4*j+2]*r[i+8] + l[4*j+3]*r[i+12];
+
+	return M;
+}
+
+Vector3 getXAxis(Matrix4 M)
+{
+	return vec3(M.m11, M.m21, M.m31);
+}
+
+Vector3 getYAxis(Matrix4 M)
+{
+	return vec3(M.m12, M.m22, M.m32);
+}
+
+Vector3 getZAxis(Matrix4 M)
+{
+	return vec3(M.m13, M.m23, M.m33);
 }
 
 Matrix4 setFrustum(float r, float t, float n, float f)
@@ -167,6 +253,7 @@ void initObj(RenderObject *r)
 	printf("Size of Indices: %d\n",r->indicesSize);
 
 	r->mProjHandle = glGetUniformLocation(r->shaderProgram,"mProj");
+	r->mViewHandle = glGetUniformLocation(r->shaderProgram,"mView");
 	r->colorHandle = glGetUniformLocation(r->shaderProgram,"color");
 	r->vTransHandle = glGetUniformLocation(r->shaderProgram,"vTrans");
 	r->scaleHandle = glGetUniformLocation(r->shaderProgram,"vScale");
@@ -178,6 +265,7 @@ void drawObj(RenderObject *r)
 	glUseProgram(r->shaderProgram);
 
 	glUniformMatrix4fv(r->mProjHandle,1, GL_TRUE, (GLfloat*)&r->mProj);
+	glUniformMatrix4fv(r->mViewHandle,1, GL_TRUE, (GLfloat*)&camera);
 	glUniform4fv(r->colorHandle,1, (GLfloat*)&r->color);
 	glUniform3fv(r->vTransHandle,1, (GLfloat*)&r->vPos);
 	glUniform3fv(r->scaleHandle,1, (GLfloat*)&r->vScale);

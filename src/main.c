@@ -33,6 +33,9 @@ int main(int argc, char **argv)
 {
 	int quit = 0;
 	unsigned int key[256];
+	int mouseX = 0;
+	int mouseY = 0;
+	Vector3 rotAxis;
 	const GLubyte *vendor, *renderer, *oglVersion, *glslVersion;
 	RenderObject lines, triangle, rectangle, circle, stern, plane, cube;	
 
@@ -59,6 +62,7 @@ int main(int argc, char **argv)
 	initStern(&stern);
 	initPlane(&plane);
 	initCube(&cube);
+	camera = identity();
 	
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -98,12 +102,51 @@ int main(int argc, char **argv)
 				case SDL_KEYUP:
 					key[event.key.keysym.sym] = 0;
 					break;
+				case SDL_MOUSEMOTION:
+					mouseX = event.motion.xrel;
+					mouseY = event.motion.yrel;
+					break;
 			}
 		}	
 		
-		if (key[SDLK_LEFT]) stern.rotZ += 0.01;				
-		if (key[SDLK_RIGHT]) stern.rotZ -= 0.01;
-		SDL_Delay(5);
+		//if (key[SDLK_LEFT]) stern.rotZ += 0.01;				
+		//if (key[SDLK_RIGHT]) stern.rotZ -= 0.01;
+		if (key[SDLK_w]) camera = matMult(translate(0.0, 0.0, 0.01), camera);
+		if (key[SDLK_s]) camera = matMult(translate(0.0, 0.0, -0.01), camera);
+		if (key[SDLK_a]) camera = matMult(translate(0.01, 0.0, 0.0), camera);
+		if (key[SDLK_d]) camera = matMult(translate(-0.01, 0.0, 0.0), camera);
+		if (key[SDLK_y])
+		{
+			rotAxis = cross(getXAxis(camera),getZAxis(camera));
+			camera = matMult(translate(rotAxis.x*0.01,rotAxis.y*0.01,rotAxis.z*0.01), camera);
+		}
+		if (key[SDLK_x])
+		{
+			rotAxis = cross(getXAxis(camera),getZAxis(camera));
+			camera = matMult(translate(rotAxis.x*-0.01,rotAxis.y*-0.01,rotAxis.z*-0.01), camera);
+		}
+		if (key[SDLK_LEFT])
+		{
+			rotAxis = cross(getXAxis(camera),getZAxis(camera));
+			camera = matMult(rotateX(rotAxis.x*0.005), camera);
+			camera = matMult(rotateY(rotAxis.y*0.005), camera);
+			camera = matMult(rotateZ(rotAxis.z*-0.005), camera);
+		}
+		if (key[SDLK_RIGHT])
+		{
+			rotAxis = cross(getXAxis(camera),getZAxis(camera));
+			camera = matMult(rotateX(rotAxis.x*-0.005), camera);
+			camera = matMult(rotateY(rotAxis.y*-0.005), camera);
+			camera = matMult(rotateZ(rotAxis.z*0.005), camera);
+		}
+		if (key[SDLK_UP]) camera = matMult(rotateX(-0.005), camera);
+		if (key[SDLK_DOWN]) camera = matMult(rotateX(0.005), camera);
+		//camera = matMult(rotateY(mouseX/600.0f),camera);		
+		//camera = matMult(rotateX(mouseY/600.0f),camera);
+		//mouseX=0;
+		//mouseY=0;
+
+		SDL_Delay(2);
 	}
 	
 	SDL_Quit();

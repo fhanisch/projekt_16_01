@@ -4,6 +4,7 @@
 #version 440
 
 uniform mat4 mProj;
+uniform mat4 mView;
 uniform vec3 vTrans;
 uniform vec3 vScale;
 uniform float rotZ;

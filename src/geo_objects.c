@@ -261,8 +261,9 @@ void initCube(RenderObject *cube)
 	cube->indicesLen = 24;
 	cube->indicesSize = sizeof(indices);
 	cube->mProj = setFrustum(0.25,0.25,0.5,100.0);
+	cube->mModel = identity();
 	cube->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);
-	cube->vPos = vec3(-2.0f, -2.0f, -8.0f);
+	cube->vPos = vec3(0.0f, 0.0f, -5.0f);
 	cube->vScale = vec3(1.0f, 1.0f, 1.0f);
 	cube->rotZ = 0.0f;
 	cube->renderMode = GL_QUADS;

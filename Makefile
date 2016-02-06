@@ -1,4 +1,4 @@
-LIB = -lSDL -lGL -lGLEW
+LIB = -lSDL -lGL -lGLEW -lm
 OBJ = build/main.o build/renderobject.o build/geo_objects.o
 
 projekt_16_01: $(OBJ)
