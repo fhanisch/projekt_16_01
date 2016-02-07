@@ -57,6 +57,7 @@ void initTriangle(RenderObject *triangle)
 	triangle->indicesLen = 3;
 	triangle->indicesSize = sizeof(indices);
 	triangle->mProj = identity();
+	triangle->mProj.m11 = (GLfloat)WND_HEIGHT/(GLfloat)WND_WIDTH;
 	triangle->mModel = scale(0.25f, 0.25f, 0.25f);
 	triangle->mModel = matMult(translate(-0.5f, 0.5f, 0.0f), triangle->mModel);
 	triangle->color = getColor(1.0f, 0.0f, 1.0f, 1.0f);			
@@ -85,6 +86,7 @@ void initRectangle(RenderObject *rect)
 	rect->indicesLen = 4;
 	rect->indicesSize = sizeof(indices);
 	rect->mProj = identity();
+	rect->mProj.m11 = (GLfloat)WND_HEIGHT/(GLfloat)WND_WIDTH;
 	rect->mModel = scale(0.25f, 0.25f, 0.25f);
 	rect->mModel = matMult(translate(0.5f, -0.5f, 0.0f), rect->mModel);
 	rect->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);	
@@ -108,6 +110,7 @@ void initCircle(RenderObject *circle)
 	circle->indicesLen = 100;
 	circle->indicesSize = 100*sizeof(GLuint);
 	circle->mProj = identity();
+	circle->mProj.m11 = (GLfloat)WND_HEIGHT/(GLfloat)WND_WIDTH;
 	circle->mModel = scale(0.25f, 0.25f, 0.25f);
 	circle->mModel = matMult(translate(-0.5f, -0.5f, 0.0f), circle->mModel);
 	circle->color = getColor(1.0f, 1.0f, 0.0f, 1.0f);	
@@ -142,6 +145,7 @@ void initStern(RenderObject *stern)
 	stern->indicesLen = 18;
 	stern->indicesSize = sizeof(indices);
 	stern->mProj = identity();
+	stern->mProj.m11 = (GLfloat)WND_HEIGHT/(GLfloat)WND_WIDTH;
 	stern->mProj.m33 = -1.0;
 	stern->mModel = scale(0.35f, 0.35f, 0.35f);
 	stern->mModel = matMult(translate(0.5f, 0.5f, 0.1f), stern->mModel);
@@ -176,7 +180,7 @@ void initPlane(RenderObject *plane)
 	plane->indices = indices;
 	plane->indicesLen = 4;
 	plane->indicesSize = sizeof(indices);
-	plane->mProj = setFrustum(0.25,0.25,0.5,100.0);
+	plane->mProj = setFrustum(0.25*(GLfloat)WND_WIDTH/(GLfloat)WND_HEIGHT,0.25,0.5,100.0);
 	plane->mModel = scale(20.0f, 20.0f, 20.0f);
 	plane->mModel = matMult(translate(0.0f, 0.0f, 0.0f), plane->mModel);
 	plane->color = getColor(1.0f, 1.0f, 1.0f, 1.0f);	
@@ -261,7 +265,7 @@ void initCube(RenderObject *cube)
 	cube->indices = indices;
 	cube->indicesLen = 24;
 	cube->indicesSize = sizeof(indices);
-	cube->mProj = setFrustum(0.25,0.25,0.5,100.0);
+	cube->mProj = setFrustum(0.25*(GLfloat)WND_WIDTH/(GLfloat)WND_HEIGHT,0.25,0.5,100.0);
 	cube->mModel = scale(1.0f, 1.0f, 1.0f);
 	cube->mModel = matMult(translate(0.0f, 0.0f, 0.0f), cube->mModel);
 	cube->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);	
@@ -280,7 +284,7 @@ void initSphere(RenderObject *sphere)
 	sphere->normals = NULL;
 	createMeshGrid(&sphere->u, &sphere->v, &sphere->uSize, &sphere->vSize, 100, 100);
 	createMeshGridIndices(&sphere->indices, &sphere->indicesLen, &sphere->indicesSize, 100, 100);
-	sphere->mProj = setFrustum(0.25,0.25,0.5,100.0);
+	sphere->mProj = setFrustum(0.25*(GLfloat)WND_WIDTH/(GLfloat)WND_HEIGHT,0.25,0.5,100.0);
 	sphere->mModel = scale(1.0f, 1.0f, 1.0f);
 	sphere->mModel = matMult(translate(0.0f, 0.0f, 0.0f), sphere->mModel);
 	sphere->color = getColor(1.0f, 0.0f, 0.0f, 1.0f);	
@@ -302,7 +306,7 @@ void initApfel(RenderObject *apfel)
 	apfel->normals = NULL;
 	createMeshGrid(&apfel->u, &apfel->v, &apfel->uSize, &apfel->vSize, 100, 100);
 	createMeshGridIndices(&apfel->indices, &apfel->indicesLen, &apfel->indicesSize, 100, 100);
-	apfel->mProj = setFrustum(0.25,0.25,0.5,100.0);
+	apfel->mProj = setFrustum(0.25*(GLfloat)WND_WIDTH/(GLfloat)WND_HEIGHT,0.25,0.5,100.0);
 	apfel->mModel = scale(1.0f, 1.0f, 1.0f);
 	apfel->mModel = matMult(translate(0.0f, 0.0f, 0.0f), apfel->mModel);
 	apfel->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);	

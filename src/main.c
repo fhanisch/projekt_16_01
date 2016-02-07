@@ -10,6 +10,7 @@
 #include "renderobject.h"
 #include "geo_objects.h"
 
+
 SDL_Event event;
 
 int initOpenGLWindow(char *wndName)
@@ -23,7 +24,7 @@ int initOpenGLWindow(char *wndName)
     	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 24 );
 	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
-	SDL_SetVideoMode(800,800,32,SDL_OPENGL);
+	SDL_SetVideoMode(WND_WIDTH,WND_HEIGHT,32,SDL_OPENGL|SDL_FULLSCREEN);
 	SDL_WM_SetCaption(wndName, NULL);
 
 	return 0;
@@ -134,6 +135,9 @@ int main(int argc, char **argv)
 			}
 		}	
 		
+		//if (key[SDLK_F1]) F1=0;
+		//if (key[SDLK_F2]) F1=1;
+		if (key[SDLK_ESCAPE]) quit=1;
 		if (!F1)
 		{
 			if (key[SDLK_LEFT]) stern.mModel = matMult(rotateZ(0.01), stern.mModel);
