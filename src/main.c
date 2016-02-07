@@ -73,11 +73,11 @@ int main(int argc, char **argv)
 
 	cube.mModel = matMult(translate(0.0, 5.0, 0.0), cube.mModel);
 	sphere[0].mModel = matMult(translate(0.0, 1.5, -5.0), sphere[0].mModel);
-	sphere[1].mModel = matMult(translate(0.0, 1.5,  5.0), sphere[1].mModel);
+	sphere[1].mModel = matMult(translate(0.0, 1.5, 5.0), sphere[1].mModel);
 	sphere[1].color = getColor(1.0, 0.0, 1.0, 1.0);
-	sphere[2].mModel = matMult(translate(5.0, 1.5,  0.0), sphere[2].mModel);
+	sphere[2].mModel = matMult(translate(5.0, 1.5, 0.0), sphere[2].mModel);
 	sphere[2].color = getColor(1.0, 1.0, 0.0, 1.0);
-	sphere[3].mModel = matMult(translate(-5.0, 1.5,  0.0), sphere[3].mModel);
+	sphere[3].mModel = matMult(translate(-5.0, 1.5, 0.0), sphere[3].mModel);
 	sphere[3].color = getColor(0.0, 0.0, 1.0, 1.0);
 	apfel.mModel = matMult(translate(0.0, 1.5, 0.0), apfel.mModel);
 	
@@ -145,10 +145,10 @@ int main(int argc, char **argv)
 		}
 		else
 		{			
-			if (key[SDLK_w]) camera = matMult(translate(0.0, 0.0, 0.01), camera);
-			if (key[SDLK_s]) camera = matMult(translate(0.0, 0.0, -0.01), camera);
-			if (key[SDLK_a]) camera = matMult(translate(0.01, 0.0, 0.0), camera);
-			if (key[SDLK_d]) camera = matMult(translate(-0.01, 0.0, 0.0), camera);
+			if (key[SDLK_w]) camera = matMult(translate(0.0, 0.0, 0.02), camera);
+			if (key[SDLK_s]) camera = matMult(translate(0.0, 0.0, -0.02), camera);
+			if (key[SDLK_a]) camera = matMult(translate(0.02, 0.0, 0.0), camera);
+			if (key[SDLK_d]) camera = matMult(translate(-0.02, 0.0, 0.0), camera);
 			if (key[SDLK_y])
 			{
 				rotAxis = cross(getXAxis(camera),getZAxis(camera));
