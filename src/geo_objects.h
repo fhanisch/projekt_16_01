@@ -9,3 +9,4 @@ void initStern(RenderObject *stern);
 void initPlane(RenderObject *plane);
 void initCube(RenderObject *cube);
 void initSphere(RenderObject *sphere);
+void initApfel(RenderObject *apfel);

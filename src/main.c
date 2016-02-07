@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 	int mouseY = 0;
 	Vector3 rotAxis;
 	const GLubyte *vendor, *renderer, *oglVersion, *glslVersion;
-	RenderObject lines, triangle, rectangle, circle, stern, plane, cube, sphere;	
+	RenderObject lines, triangle, rectangle, circle, stern, plane, cube, sphere[4], apfel;	
 
 	printf("Programm: %s\n",argv[0]+2);
 	memset(key,0,sizeof(key));
@@ -63,8 +63,22 @@ int main(int argc, char **argv)
 	initStern(&stern);
 	initPlane(&plane);
 	initCube(&cube);
-	initSphere(&sphere);
+	initSphere(&sphere[0]);
+	initSphere(&sphere[1]);
+	initSphere(&sphere[2]);
+	initSphere(&sphere[3]);
+	initApfel(&apfel);
 	camera = identity();
+
+	cube.mModel = matMult(translate(0.0, 5.0, 0.0), cube.mModel);
+	sphere[0].mModel = matMult(translate(0.0, 1.5, -5.0), sphere[0].mModel);
+	sphere[1].mModel = matMult(translate(0.0, 1.5,  5.0), sphere[1].mModel);
+	sphere[1].color = getColor(1.0, 0.0, 1.0, 1.0);
+	sphere[2].mModel = matMult(translate(5.0, 1.5,  0.0), sphere[2].mModel);
+	sphere[2].color = getColor(1.0, 1.0, 0.0, 1.0);
+	sphere[3].mModel = matMult(translate(-5.0, 1.5,  0.0), sphere[3].mModel);
+	sphere[3].color = getColor(0.0, 0.0, 1.0, 1.0);
+	apfel.mModel = matMult(translate(0.0, 1.5, 0.0), apfel.mModel);
 	
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -91,7 +105,11 @@ int main(int argc, char **argv)
 		{
 			drawObj(&plane);
 			//drawObj(&cube);
-			drawObj(&sphere);
+			drawObj(&sphere[0]);
+			drawObj(&sphere[1]);
+			drawObj(&sphere[2]);
+			drawObj(&sphere[3]);
+			drawObj(&apfel);
 		}
 
 		SDL_GL_SwapBuffers();		
@@ -160,7 +178,7 @@ int main(int argc, char **argv)
 			//mouseY=0;
 		}
 
-		SDL_Delay(2);
+		SDL_Delay(5);
 	}
 	
 	SDL_Quit();

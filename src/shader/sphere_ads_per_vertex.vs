@@ -1,0 +1,73 @@
+//vertex shader
+//Erstellt: 07.02.2016
+
+#version 440
+
+uniform mat4 mProj;
+uniform mat4 mView;
+uniform mat4 mModel;
+uniform vec4 color;
+
+layout (location = 0) in float mesh_u;
+layout (location = 1) in float mesh_v;
+
+out vec3 ADS;
+
+const float pi = 3.14159;
+const vec3 lightSource = vec3(100.0, 100.0, 100.0);
+
+void main()
+{
+	float R=1.0;
+	vec4 vertexPosition;
+	vec4 normalPosition;
+	vec4 lightPosition;
+
+	float u = 2.0*pi*mesh_u;
+	float v = pi*mesh_v;	
+	vec3 vertex;
+	vec3 normal;
+	//vec3 fu,fv;	
+
+	vertex.x = R*sin(v)*cos(u);
+	vertex.y = R*sin(v)*sin(u);
+	vertex.z = R*cos(v);
+
+	normal.x = sin(v)*cos(u);
+	normal.y = sin(v)*sin(u);
+	normal.z = cos(v);	
+
+	/*
+	fu.x=-sin(v)*sin(u);
+	fu.y=sin(v)*cos(u);
+	fu.z=0.0;
+
+	fv.x=cos(v)*cos(u);
+	fv.y=cos(v)*sin(u);
+	fv.z=-sin(v);
+
+	normal = -cross(fu,fv);
+	*/
+	
+	vec3 A=0.1*color.rgb;
+	vec3 D=color.rgb;
+	vec3 S = vec3(0.0);
+			
+	vertexPosition = mView * mModel * vec4(vertex, 1.0);
+	normalPosition = transpose(inverse(mView*mModel)) * vec4(normal, 1.0);
+	lightPosition = mView * vec4(lightSource, 1.0);
+	
+	vec3 s = normalize(lightPosition.xyz - vertexPosition.xyz);
+	vec3 n = normalize(normalPosition.xyz);
+	vec3 vp = normalize(-vertexPosition.xyz);	
+	vec3 r = reflect(-s,n);
+
+	float diffuseIntensity = max(dot(s,n), 0.0);	
+	if( diffuseIntensity > 0.0 )
+		S = vec3(1.0,1.0,0.6) * pow( max( dot(r,vp), 0.0 ), 30.0 );
+
+	ADS = A + diffuseIntensity*D + S;
+
+	gl_Position = mProj * vertexPosition;
+}
+

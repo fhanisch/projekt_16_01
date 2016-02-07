@@ -152,8 +152,8 @@ void initStern(RenderObject *stern)
 
 void initPlane(RenderObject *plane)
 {
-	GLchar vertex_shader_filename[] = "src/shader/diffuse_per_vertex.vs";
-	GLchar fragment_shader_filename[] = "src/shader/diffuse_per_vertex.fs";
+	GLchar vertex_shader_filename[] = "src/shader/ads_per_fragment.vs";
+	GLchar fragment_shader_filename[] = "src/shader/ads_per_fragment.fs";
 	GLfloat vertices[] = {	-1.0f, 0.0f, -1.0f,
 			 	 1.0f, 0.0f, -1.0f,
 			 	-1.0f, 0.0f,  1.0f,
@@ -186,8 +186,8 @@ void initPlane(RenderObject *plane)
 
 void initCube(RenderObject *cube)
 {
-	GLchar vertex_shader_filename[] = "src/shader/diffuse_per_vertex.vs";
-	GLchar fragment_shader_filename[] = "src/shader/diffuse_per_vertex.fs";
+	GLchar vertex_shader_filename[] = "src/shader/ads_per_fragment.vs";
+	GLchar fragment_shader_filename[] = "src/shader/ads_per_fragment.fs";
 	GLfloat vertices[] = {	-1.0f, -1.0f, -1.0f,
 			 	 1.0f, -1.0f, -1.0f,
 			 	-1.0f, -1.0f,  1.0f,
@@ -263,7 +263,7 @@ void initCube(RenderObject *cube)
 	cube->indicesSize = sizeof(indices);
 	cube->mProj = setFrustum(0.25,0.25,0.5,100.0);
 	cube->mModel = scale(1.0f, 1.0f, 1.0f);
-	cube->mModel = matMult(translate(0.0f, 1.5f, -5.0f), cube->mModel);
+	cube->mModel = matMult(translate(0.0f, 0.0f, 0.0f), cube->mModel);
 	cube->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);	
 	cube->renderMode = GL_QUADS;
 	initObj(cube);
@@ -271,8 +271,8 @@ void initCube(RenderObject *cube)
 
 void initSphere(RenderObject *sphere)
 {
-	GLchar vertex_shader_filename[] = "src/shader/sphere.vs";
-	GLchar fragment_shader_filename[] = "src/shader/diffuse_per_vertex.fs";
+	GLchar vertex_shader_filename[] = "src/shader/sphere_ads_per_fragment.vs";
+	GLchar fragment_shader_filename[] = "src/shader/ads_per_fragment.fs";
 	
 	sphere->vertex_shader_filename = vertex_shader_filename;	
 	sphere->fragment_shader_filename = fragment_shader_filename;	
@@ -282,12 +282,34 @@ void initSphere(RenderObject *sphere)
 	createMeshGridIndices(&sphere->indices, &sphere->indicesLen, &sphere->indicesSize, 100, 100);
 	sphere->mProj = setFrustum(0.25,0.25,0.5,100.0);
 	sphere->mModel = scale(1.0f, 1.0f, 1.0f);
-	sphere->mModel = matMult(translate(0.0f, 1.5f, -5.0f), sphere->mModel);
+	sphere->mModel = matMult(translate(0.0f, 0.0f, 0.0f), sphere->mModel);
 	sphere->color = getColor(1.0f, 0.0f, 0.0f, 1.0f);	
 	sphere->renderMode = GL_TRIANGLES;
 	initObj(sphere);
 	free(sphere->u);
 	free(sphere->v);
 	free(sphere->indices);
+}
+
+void initApfel(RenderObject *apfel)
+{
+	GLchar vertex_shader_filename[] = "src/shader/apfel.vs";
+	GLchar fragment_shader_filename[] = "src/shader/ads_per_fragment.fs";
+	
+	apfel->vertex_shader_filename = vertex_shader_filename;	
+	apfel->fragment_shader_filename = fragment_shader_filename;	
+	apfel->vertices = NULL;
+	apfel->normals = NULL;
+	createMeshGrid(&apfel->u, &apfel->v, &apfel->uSize, &apfel->vSize, 100, 100);
+	createMeshGridIndices(&apfel->indices, &apfel->indicesLen, &apfel->indicesSize, 100, 100);
+	apfel->mProj = setFrustum(0.25,0.25,0.5,100.0);
+	apfel->mModel = scale(1.0f, 1.0f, 1.0f);
+	apfel->mModel = matMult(translate(0.0f, 0.0f, 0.0f), apfel->mModel);
+	apfel->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);	
+	apfel->renderMode = GL_TRIANGLES;
+	initObj(apfel);
+	free(apfel->u);
+	free(apfel->v);
+	free(apfel->indices);
 }
 
