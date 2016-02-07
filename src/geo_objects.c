@@ -2,6 +2,7 @@
 //Erstellt: 31.01.2016
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -23,6 +24,7 @@ void initLines(RenderObject *lines)
 	lines->fragment_shader_filename = fragment_shader_filename;
 	lines->normals = NULL;
 	lines->u = NULL;
+	lines->v = NULL;
 	lines->vertices = vertices;
 	lines->verticesSize = sizeof(vertices);
 	lines->indices = indices;
@@ -48,6 +50,7 @@ void initTriangle(RenderObject *triangle)
 	triangle->fragment_shader_filename = fragment_shader_filename;
 	triangle->normals = NULL;
 	triangle->u = NULL;
+	triangle->v = NULL;
 	triangle->vertices = vertices;
 	triangle->verticesSize = sizeof(vertices);
 	triangle->indices = indices;
@@ -75,6 +78,7 @@ void initRectangle(RenderObject *rect)
 	rect->fragment_shader_filename = fragment_shader_filename;
 	rect->normals = NULL;
 	rect->u = NULL;
+	rect->v = NULL;
 	rect->vertices = vertices;
 	rect->verticesSize = sizeof(vertices);
 	rect->indices = indices;
@@ -94,10 +98,10 @@ void initCircle(RenderObject *circle)
 	GLchar fragment_shader_filename[] = "src/shader/generic.fs";
 	
 	circle->vertex_shader_filename = vertex_shader_filename;	
-	circle->fragment_shader_filename = fragment_shader_filename;
-	circle->verticesSize=0;
+	circle->fragment_shader_filename = fragment_shader_filename;	
 	circle->vertices = NULL;
 	circle->normals = NULL;
+	circle->v = NULL;
 	circle->u = vecf(0.0f, 1.0f, 100);
 	circle->uSize = 100*sizeof(GLfloat);
 	circle->indices = veci(0,100);
@@ -131,6 +135,7 @@ void initStern(RenderObject *stern)
 	stern->fragment_shader_filename = fragment_shader_filename;
 	stern->normals = NULL;
 	stern->u = NULL;
+	stern->v = NULL;
 	stern->vertices = vertices;
 	stern->verticesSize = sizeof(vertices);
 	stern->indices = indices;
@@ -163,6 +168,7 @@ void initPlane(RenderObject *plane)
 	plane->vertex_shader_filename = vertex_shader_filename;	
 	plane->fragment_shader_filename = fragment_shader_filename;
 	plane->u = NULL;
+	plane->v = NULL;
 	plane->vertices = vertices;
 	plane->verticesSize = sizeof(vertices);
 	plane->normals = normals;
@@ -247,6 +253,7 @@ void initCube(RenderObject *cube)
 	cube->vertex_shader_filename = vertex_shader_filename;	
 	cube->fragment_shader_filename = fragment_shader_filename;
 	cube->u = NULL;
+	cube->v = NULL;
 	cube->vertices = vertices;
 	cube->verticesSize = sizeof(vertices);
 	cube->normals = normals;
@@ -260,5 +267,27 @@ void initCube(RenderObject *cube)
 	cube->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);	
 	cube->renderMode = GL_QUADS;
 	initObj(cube);
+}
+
+void initSphere(RenderObject *sphere)
+{
+	GLchar vertex_shader_filename[] = "src/shader/sphere.vs";
+	GLchar fragment_shader_filename[] = "src/shader/diffuse_per_vertex.fs";
+	
+	sphere->vertex_shader_filename = vertex_shader_filename;	
+	sphere->fragment_shader_filename = fragment_shader_filename;	
+	sphere->vertices = NULL;
+	sphere->normals = NULL;
+	createMeshGrid(&sphere->u, &sphere->v, &sphere->uSize, &sphere->vSize, 100, 100);
+	createMeshGridIndices(&sphere->indices, &sphere->indicesLen, &sphere->indicesSize, 100, 100);
+	sphere->mProj = setFrustum(0.25,0.25,0.5,100.0);
+	sphere->mModel = scale(1.0f, 1.0f, 1.0f);
+	sphere->mModel = matMult(translate(0.0f, 1.5f, -5.0f), sphere->mModel);
+	sphere->color = getColor(1.0f, 0.0f, 0.0f, 1.0f);	
+	sphere->renderMode = GL_TRIANGLES;
+	initObj(sphere);
+	free(sphere->u);
+	free(sphere->v);
+	free(sphere->indices);
 }
 

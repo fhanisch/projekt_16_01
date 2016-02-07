@@ -10,6 +10,7 @@
 //#include <GL/glu.h>
 #include "renderobject.h"
 
+
 int loadShader(GLchar **shaderStr, char *fileName)
 {
 	uint filesize;
@@ -227,6 +228,46 @@ void setPixel(GLubyte *tex, int xSize, int x, int y, Color c)
 	tex[pixelPtr+2] = 0;
 }
 
+void createMeshGrid(float **u, float **v, unsigned int *uSize, unsigned int *vSize, int m, int n)
+{	
+	unsigned int i,j;
+
+	*uSize = m*n*sizeof(float);
+	*vSize = m*n*sizeof(float);
+	printf("uSize: %d\n",*uSize);
+	printf("vSize: %d\n",*vSize);
+	*u = malloc(*uSize);
+	*v = malloc(*vSize);
+
+	for(i=0;i<m;i++)
+		for(j=0;j<n;j++)
+		{
+			(*u)[i*n+j]=(float)j/((float)n-1);
+			(*v)[j*m+i]=(float)j/((float)m-1);
+		}	
+}
+
+void createMeshGridIndices(uint **indices, uint *indicesLen, uint *indicesSize, int m, int n)
+{
+	uint i,j;
+
+	*indicesLen=3*2*(m-1)*(n-1);
+	*indicesSize = *indicesLen * sizeof(uint);
+	*indices = malloc(*indicesSize);
+
+	for(i=0;i<m-1;i++)
+		for(j=0;j<n-1;j++)
+		{
+			(*indices)[6*(i*(n-1)+j)+0]=i*n+j;
+			(*indices)[6*(i*(n-1)+j)+1]=i*n+j+1;
+			(*indices)[6*(i*(n-1)+j)+2]=(i+1)*n+j;
+
+			(*indices)[6*(i*(n-1)+j)+3]=i*n+j+1;
+			(*indices)[6*(i*(n-1)+j)+4]=(i+1)*n+j;
+			(*indices)[6*(i*(n-1)+j)+5]=(i+1)*n+j+1;
+		}
+}
+
 void initObj(RenderObject *r)
 {
 	loadShader(&r->vertex_shader_text, r->vertex_shader_filename);
@@ -250,6 +291,13 @@ void initObj(RenderObject *r)
 		createVBO(&r->uID,r->uSize,r->u);
 		printf("uID: %i\n",r->uID);
 		printf("Size of u: %d\n",r->uSize);		
+	}
+
+	if(r->v!=NULL)
+	{
+		createVBO(&r->vID,r->vSize,r->v);
+		printf("vID: %i\n",r->vID);
+		printf("Size of v: %d\n",r->vSize);		
 	}
 
 	if(r->normals!=NULL)
@@ -290,6 +338,13 @@ void drawObj(RenderObject *r)
 		glBindBuffer(GL_ARRAY_BUFFER, r->uID);
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, 0, 0);
+	}
+
+	if(r->v!=NULL)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, r->vID);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
 	if(r->normals!=NULL)

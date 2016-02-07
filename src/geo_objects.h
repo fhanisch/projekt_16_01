@@ -8,3 +8,4 @@ void initCircle(RenderObject *rect);
 void initStern(RenderObject *stern);
 void initPlane(RenderObject *plane);
 void initCube(RenderObject *cube);
+void initSphere(RenderObject *sphere);

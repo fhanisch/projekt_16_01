@@ -21,7 +21,7 @@ int initOpenGLWindow(char *wndName)
     	SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
 	SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
     	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 24 );
-	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 0 );
+	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
 	SDL_SetVideoMode(800,800,32,SDL_OPENGL);
 	SDL_WM_SetCaption(wndName, NULL);
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 	int mouseY = 0;
 	Vector3 rotAxis;
 	const GLubyte *vendor, *renderer, *oglVersion, *glslVersion;
-	RenderObject lines, triangle, rectangle, circle, stern, plane, cube;	
+	RenderObject lines, triangle, rectangle, circle, stern, plane, cube, sphere;	
 
 	printf("Programm: %s\n",argv[0]+2);
 	memset(key,0,sizeof(key));
@@ -63,6 +63,7 @@ int main(int argc, char **argv)
 	initStern(&stern);
 	initPlane(&plane);
 	initCube(&cube);
+	initSphere(&sphere);
 	camera = identity();
 	
 	glShadeModel(GL_SMOOTH);
@@ -89,7 +90,8 @@ int main(int argc, char **argv)
 		else
 		{
 			drawObj(&plane);
-			drawObj(&cube);
+			//drawObj(&cube);
+			drawObj(&sphere);
 		}
 
 		SDL_GL_SwapBuffers();		

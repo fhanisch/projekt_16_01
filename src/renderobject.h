@@ -1,6 +1,8 @@
 //renderobject.h
 //Erstellt: 30.01.2016
 
+typedef unsigned int uint;
+
 typedef struct
 {
 	float x,y,z;
@@ -31,19 +33,19 @@ typedef struct
 
 typedef struct
 {
-	GLuint vertexShader, fragmentShader, shaderProgram, vboID, nboID, iboID, uID;
+	GLuint vertexShader, fragmentShader, shaderProgram, vboID, nboID, iboID, uID, vID;
 	GLint mProjHandle, mViewHandle, mModelHandle, colorHandle;
 	GLenum renderMode;
 	GLchar *vertex_shader_filename, *fragment_shader_filename;
 	GLchar *vertex_shader_text, *fragment_shader_text;
-	GLfloat *vertices, *normals, *u;
-	GLuint verticesSize, normalsSize, uSize;
+	GLfloat *vertices, *normals, *u, *v;
+	GLuint verticesSize, normalsSize, uSize, vSize;
 	GLuint *indices;
 	GLuint indicesLen;
 	GLuint indicesSize;
 	Matrix4 mProj;
 	Matrix4 mView;
-	Matrix4 mModel;		
+	Matrix4 mModel;	
 	Color color;
 } RenderObject;
 
@@ -71,5 +73,7 @@ Vector3 getYAxis(Matrix4 M);
 Vector3 getZAxis(Matrix4 M);
 Matrix4 setFrustum(float r, float t, float n, float f);
 void setPixel(GLubyte *tex, int xSize, int x, int y, Color c);
+void createMeshGrid(float **u, float **v, unsigned int *uSize, unsigned int *vSize, int m, int n);
+void createMeshGridIndices(uint **indices, uint *indicesLen, uint *indicesSize, int m, int n);
 void initObj(RenderObject *r);
 void drawObj(RenderObject *r);
