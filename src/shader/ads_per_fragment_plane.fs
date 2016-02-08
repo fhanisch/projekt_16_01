@@ -45,6 +45,10 @@ void main()
 	d = dot(u,s)*dot(u,s) - (dot(u,u) - 1.0);
 	if (d<0) c1 = 1.0;
 
+	vec3 s2 = reflect(-normalize(vertexPosition.xyz),n);
+	d = dot(u,s2)*dot(u,s2) - (dot(u,u) - 1.0);
+	if (d>0) ADS = mix(vec3(0.0,0.0,1.0),ADS,0.9);
+
 	u = vertexPosition.xyz - sphere2Position.xyz;
 	d = dot(u,s)*dot(u,s) - (dot(u,u) - 1.0);
 	if (d<0) c2 = 1.0;
