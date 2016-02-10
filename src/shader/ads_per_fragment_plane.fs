@@ -40,10 +40,10 @@ void main()
 {		
 	vec3 u;
 	float d;
-	float c1 = 0.0;
-	float c2 = 0.0;
-	float c3 = 0.0;
-	float c4 = 0.0;
+	float c1 = 1.0;
+	float c2 = 1.0;
+	float c3 = 1.0;
+	float c4 = 1.0;
 				
 	vec4 lightPosition = mView * vec4(lightSource, 1.0);
 	vec4 sphere1Position = mView * vec4(-5.0, 1.5, 0.0, 1.0);
@@ -54,14 +54,14 @@ void main()
 	vec3 ADS = calcADS(color.rgb, vertexPosition.xyz, normalPosition.xyz, lightPosition.xyz);
 	
 	vec3 s = normalize(lightPosition.xyz - vertexPosition.xyz);
-	if (calcIntersection(vertexPosition.xyz,sphere1Position.xyz,s)<0) c1 = 1.0;
-	if (calcIntersection(vertexPosition.xyz,sphere2Position.xyz,s)<0) c2 = 1.0;
-	if (calcIntersection(vertexPosition.xyz,sphere3Position.xyz,s)<0) c3 = 1.0;
-	if (calcIntersection(vertexPosition.xyz,sphere4Position.xyz,s)<0) c4 = 1.0;
+	if (calcIntersection(vertexPosition.xyz,sphere1Position.xyz,s)>=0) c1 = 0.0;
+	if (calcIntersection(vertexPosition.xyz,sphere2Position.xyz,s)>=0) c2 = 0.0;
+	if (calcIntersection(vertexPosition.xyz,sphere3Position.xyz,s)>=0) c3 = 0.0;
+	if (calcIntersection(vertexPosition.xyz,sphere4Position.xyz,s)>=0) c4 = 0.0;
 
 	vec3 n = normalize(normalPosition.xyz);
 	s = reflect(-normalize(vertexPosition.xyz),n);	
-	if (calcIntersection(vertexPosition.xyz,sphere1Position.xyz,s)>0)
+	if (calcIntersection(vertexPosition.xyz,sphere1Position.xyz,s)>=0)
 		ADS = mix(vec3(0.0,0.0,1.0),ADS,0.9);
 	
 	FragColor = vec4(c1*c2*c3*c4*ADS, 1.0);	
