@@ -33,6 +33,14 @@ typedef struct
 
 typedef struct
 {
+	GLuint iboID, uID, vID;
+	GLfloat *u, *v;
+	GLuint uSize, vSize;
+	GLuint *indices, indicesLen, indicesSize;
+} MeshGridObject;
+
+typedef struct
+{
 	GLuint vertexShader, fragmentShader, shaderProgram, vboID, nboID, iboID, uID, vID;
 	GLint mProjHandle, mViewHandle, mModelHandle, colorHandle;
 	GLenum renderMode;
@@ -46,7 +54,7 @@ typedef struct
 	Matrix4 mProj;
 	Matrix4 mView;
 	Matrix4 mModel;	
-	Color color;
+	Color color;	
 } RenderObject;
 
 Matrix4 camera;
@@ -75,5 +83,6 @@ Matrix4 setFrustum(float r, float t, float n, float f);
 void setPixel(GLubyte *tex, int xSize, int x, int y, Color c);
 void createMeshGrid(float **u, float **v, unsigned int *uSize, unsigned int *vSize, int m, int n);
 void createMeshGridIndices(uint **indices, uint *indicesLen, uint *indicesSize, int m, int n);
+void genMeshGridObject(MeshGridObject *meshGridObj);
 void initObj(RenderObject *r);
 void drawObj(RenderObject *r);

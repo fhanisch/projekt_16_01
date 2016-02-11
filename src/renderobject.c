@@ -268,6 +268,18 @@ void createMeshGridIndices(uint **indices, uint *indicesLen, uint *indicesSize, 
 		}
 }
 
+void genMeshGridObject(MeshGridObject *meshGridObj)
+{
+	createMeshGrid(&meshGridObj->u, &meshGridObj->v, &meshGridObj->uSize, &meshGridObj->vSize, 100, 100);
+	createMeshGridIndices(&meshGridObj->indices, &meshGridObj->indicesLen, &meshGridObj->indicesSize, 100, 100);
+	createVBO(&meshGridObj->uID,meshGridObj->uSize,meshGridObj->u);
+	printf("uID: %i\n",meshGridObj->uID);	
+	createVBO(&meshGridObj->vID,meshGridObj->vSize,meshGridObj->v);
+	printf("vID: %i\n",meshGridObj->vID);	
+	createIBO(&meshGridObj->iboID, meshGridObj->indicesSize, meshGridObj->indices);
+	printf("iboID: %i\n",meshGridObj->iboID);	
+}
+
 void initObj(RenderObject *r)
 {
 	loadShader(&r->vertex_shader_text, r->vertex_shader_filename);
@@ -307,9 +319,12 @@ void initObj(RenderObject *r)
 		printf("Size of normals: %d\n",r->normalsSize);
 	}
 
-	createIBO(&r->iboID, r->indicesSize, r->indices);
-	printf("iboID: %i\n",r->iboID);
-	printf("Size of Indices: %d\n",r->indicesSize);
+	if(r->indices!=NULL)
+	{
+		createIBO(&r->iboID, r->indicesSize, r->indices);
+		printf("iboID: %i\n",r->iboID);
+		printf("Size of Indices: %d\n",r->indicesSize);
+	}
 
 	r->mProjHandle = glGetUniformLocation(r->shaderProgram,"mProj");
 	r->mViewHandle = glGetUniformLocation(r->shaderProgram,"mView");
@@ -326,35 +341,35 @@ void drawObj(RenderObject *r)
 	glUniformMatrix4fv(r->mModelHandle,1, GL_TRUE, (GLfloat*)&r->mModel);
 	glUniform4fv(r->colorHandle,1, (GLfloat*)&r->color);
 			
-	if (r->vertices!=NULL)
+	if (r->vboID!=0)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, r->vboID);
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 	
-	if(r->u!=NULL)
+	if(r->uID!=0)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, r->uID);
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
-	if(r->v!=NULL)
+	if(r->vID!=0)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, r->vID);
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
-	if(r->normals!=NULL)
+	if(r->nboID!=0)
 	{		
 		glBindBuffer(GL_ARRAY_BUFFER, r->nboID);
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, r->iboID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, r->iboID);	
 	glDrawElements(r->renderMode, r->indicesLen, GL_UNSIGNED_INT, 0);
 }
 

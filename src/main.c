@@ -39,7 +39,8 @@ int main(int argc, char **argv)
 	int mouseY = 0;
 	Vector3 rotAxis;
 	const GLubyte *vendor, *renderer, *oglVersion, *glslVersion;
-	RenderObject lines, triangle, rectangle, circle, stern, plane, cube, sphere[4], apfel;	
+	RenderObject lines, triangle, rectangle, circle, stern, plane, cube, sphere[4], apfel;
+	MeshGridObject mesh;
 
 	printf("Programm: %s\n",argv[0]+2);
 	memset(key,0,sizeof(key));
@@ -57,6 +58,7 @@ int main(int argc, char **argv)
 	printf("OpenGL Version: %s\n",oglVersion);
 	printf("GLSL Version: %s\n", glslVersion);
 
+	genMeshGridObject(&mesh);
 	initLines(&lines);
 	initTriangle(&triangle);
 	initRectangle(&rectangle);
@@ -64,22 +66,24 @@ int main(int argc, char **argv)
 	initStern(&stern);
 	initPlane(&plane);
 	initCube(&cube);
-	initSphere(&sphere[0]);
-	initSphere(&sphere[1]);
-	initSphere(&sphere[2]);
-	initSphere(&sphere[3]);
-	initApfel(&apfel);
+	initSphere(&sphere[0], &mesh);
+	initSphere(&sphere[1], &mesh);
+	initSphere(&sphere[2], &mesh);
+	initSphere(&sphere[3], &mesh);
+	initApfel(&apfel, &mesh);
 	camera = identity();
 
 	cube.mModel = matMult(translate(0.0, 5.0, 0.0), cube.mModel);
-	sphere[0].mModel = matMult(translate(0.0, 1.5, -5.0), sphere[0].mModel);
-	sphere[1].mModel = matMult(translate(0.0, 1.5, 5.0), sphere[1].mModel);
+	sphere[0].mModel = matMult(translate(0.0, 1.0, -5.0), sphere[0].mModel);
+	sphere[1].mModel = matMult(translate(0.0, 1.0, 5.0), sphere[1].mModel);
 	sphere[1].color = getColor(1.0, 0.0, 1.0, 1.0);
-	sphere[2].mModel = matMult(translate(5.0, 1.5, 0.0), sphere[2].mModel);
+	sphere[2].mModel = matMult(translate(5.0, 1.0, 0.0), sphere[2].mModel);
 	sphere[2].color = getColor(1.0, 1.0, 0.0, 1.0);
-	sphere[3].mModel = matMult(translate(-5.0, 1.5, 0.0), sphere[3].mModel);
+	sphere[3].mModel = matMult(translate(-5.0, 1.0, 0.0), sphere[3].mModel);
 	sphere[3].color = getColor(0.0, 0.0, 1.0, 1.0);
-	apfel.mModel = matMult(translate(0.0, 1.5, 0.0), apfel.mModel);
+	apfel.mModel = matMult(rotateX(-0.5), apfel.mModel);
+	apfel.mModel = matMult(rotateY(0.1), apfel.mModel);
+	apfel.mModel = matMult(translate(0.0, 0.85, 0.0), apfel.mModel);
 	
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);

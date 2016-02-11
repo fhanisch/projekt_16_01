@@ -34,7 +34,12 @@ void initLines(RenderObject *lines)
 	lines->mModel = scale(1.0f, 1.0f, 1.0f);
 	lines->color = getColor(1.0f, 0.0f, 0.0f, 1.0f);			
 	lines->renderMode = GL_LINES;
-	initObj(lines);
+	lines->vboID = 0;
+	lines->nboID = 0;
+	lines->uID = 0;
+	lines->vID = 0;
+	lines->iboID = 0;
+	initObj(lines);	
 }
 
 void initTriangle(RenderObject *triangle)
@@ -62,6 +67,11 @@ void initTriangle(RenderObject *triangle)
 	triangle->mModel = matMult(translate(-0.5f, 0.5f, 0.0f), triangle->mModel);
 	triangle->color = getColor(1.0f, 0.0f, 1.0f, 1.0f);			
 	triangle->renderMode = GL_TRIANGLES;
+	triangle->vboID = 0;
+	triangle->nboID = 0;
+	triangle->uID = 0;
+	triangle->vID = 0;
+	triangle->iboID = 0;
 	initObj(triangle);
 }
 
@@ -91,6 +101,11 @@ void initRectangle(RenderObject *rect)
 	rect->mModel = matMult(translate(0.5f, -0.5f, 0.0f), rect->mModel);
 	rect->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);	
 	rect->renderMode = GL_TRIANGLE_STRIP;
+	rect->vboID = 0;
+	rect->nboID = 0;
+	rect->uID = 0;
+	rect->vID = 0;
+	rect->iboID = 0;
 	initObj(rect);
 }
 
@@ -115,6 +130,11 @@ void initCircle(RenderObject *circle)
 	circle->mModel = matMult(translate(-0.5f, -0.5f, 0.0f), circle->mModel);
 	circle->color = getColor(1.0f, 1.0f, 0.0f, 1.0f);	
 	circle->renderMode = GL_POLYGON;
+	circle->vboID = 0;
+	circle->nboID = 0;
+	circle->uID = 0;
+	circle->vID = 0;
+	circle->iboID = 0;
 	initObj(circle);
 }
 
@@ -151,6 +171,11 @@ void initStern(RenderObject *stern)
 	stern->mModel = matMult(translate(0.5f, 0.5f, 0.1f), stern->mModel);
 	stern->color = getColor(0.0f, 0.0f, 1.0f, 1.0f);	
 	stern->renderMode = GL_TRIANGLES;
+	stern->vboID = 0;
+	stern->nboID = 0;
+	stern->uID = 0;
+	stern->vID = 0;
+	stern->iboID = 0;
 	initObj(stern);
 }
 
@@ -185,6 +210,11 @@ void initPlane(RenderObject *plane)
 	plane->mModel = matMult(translate(0.0f, 0.0f, 0.0f), plane->mModel);
 	plane->color = getColor(1.0f, 1.0f, 1.0f, 1.0f);	
 	plane->renderMode = GL_TRIANGLE_STRIP;
+	plane->vboID = 0;
+	plane->nboID = 0;
+	plane->uID = 0;
+	plane->vID = 0;
+	plane->iboID = 0;
 	initObj(plane);
 }
 
@@ -270,10 +300,15 @@ void initCube(RenderObject *cube)
 	cube->mModel = matMult(translate(0.0f, 0.0f, 0.0f), cube->mModel);
 	cube->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);	
 	cube->renderMode = GL_QUADS;
+	cube->vboID = 0;
+	cube->nboID = 0;
+	cube->uID = 0;
+	cube->vID = 0;
+	cube->iboID = 0;
 	initObj(cube);
 }
 
-void initSphere(RenderObject *sphere)
+void initSphere(RenderObject *sphere, MeshGridObject *mesh)
 {
 	GLchar vertex_shader_filename[] = "src/shader/sphere_ads_per_fragment.vs";
 	GLchar fragment_shader_filename[] = "src/shader/ads_per_fragment.fs";
@@ -282,20 +317,24 @@ void initSphere(RenderObject *sphere)
 	sphere->fragment_shader_filename = fragment_shader_filename;	
 	sphere->vertices = NULL;
 	sphere->normals = NULL;
-	createMeshGrid(&sphere->u, &sphere->v, &sphere->uSize, &sphere->vSize, 100, 100);
-	createMeshGridIndices(&sphere->indices, &sphere->indicesLen, &sphere->indicesSize, 100, 100);
+	sphere->u = NULL;	
+	sphere->v = NULL;
+	sphere->indices = NULL;
 	sphere->mProj = setFrustum(0.25*(GLfloat)WND_WIDTH/(GLfloat)WND_HEIGHT,0.25,0.5,100.0);
 	sphere->mModel = scale(1.0f, 1.0f, 1.0f);
 	sphere->mModel = matMult(translate(0.0f, 0.0f, 0.0f), sphere->mModel);
 	sphere->color = getColor(1.0f, 0.0f, 0.0f, 1.0f);	
 	sphere->renderMode = GL_TRIANGLES;
 	initObj(sphere);
-	free(sphere->u);
-	free(sphere->v);
-	free(sphere->indices);
+	sphere->vboID = 0;
+	sphere->nboID = 0;
+	sphere->uID = mesh->uID;
+	sphere->vID = mesh->vID;
+	sphere->iboID = mesh->iboID;
+	sphere->indicesLen = mesh->indicesLen;
 }
 
-void initApfel(RenderObject *apfel)
+void initApfel(RenderObject *apfel, MeshGridObject *mesh)
 {
 	GLchar vertex_shader_filename[] = "src/shader/apfel.vs";
 	GLchar fragment_shader_filename[] = "src/shader/ads_per_fragment.fs";
@@ -304,16 +343,20 @@ void initApfel(RenderObject *apfel)
 	apfel->fragment_shader_filename = fragment_shader_filename;	
 	apfel->vertices = NULL;
 	apfel->normals = NULL;
-	createMeshGrid(&apfel->u, &apfel->v, &apfel->uSize, &apfel->vSize, 100, 100);
-	createMeshGridIndices(&apfel->indices, &apfel->indicesLen, &apfel->indicesSize, 100, 100);
+	apfel->u = NULL;	
+	apfel->v = NULL;
+	apfel->indices = NULL;
 	apfel->mProj = setFrustum(0.25*(GLfloat)WND_WIDTH/(GLfloat)WND_HEIGHT,0.25,0.5,100.0);
 	apfel->mModel = scale(1.0f, 1.0f, 1.0f);
 	apfel->mModel = matMult(translate(0.0f, 0.0f, 0.0f), apfel->mModel);
 	apfel->color = getColor(0.0f, 1.0f, 0.0f, 1.0f);	
 	apfel->renderMode = GL_TRIANGLES;
 	initObj(apfel);
-	free(apfel->u);
-	free(apfel->v);
-	free(apfel->indices);
+	apfel->vboID = 0;
+	apfel->nboID = 0;
+	apfel->uID = mesh->uID;
+	apfel->vID = mesh->vID;
+	apfel->iboID = mesh->iboID;
+	apfel->indicesLen = mesh->indicesLen;
 }
 
