@@ -85,10 +85,10 @@ void main()
 	vec3 ADS = calcADS(tex.xyz, vertexPosition.xyz, normalPosition.xyz, lightPosition.xyz);
 	
 	vec3 s = normalize(lightPosition.xyz - vertexPosition.xyz);
-	if (calcDiscriminant(vertexPosition.xyz,spherePosition[0].xyz,s)>=0) c = 0.0;
-	if (calcDiscriminant(vertexPosition.xyz,spherePosition[1].xyz,s)>=0) c = 0.0;
-	if (calcDiscriminant(vertexPosition.xyz,spherePosition[2].xyz,s)>=0) c = 0.0;
-	if (calcDiscriminant(vertexPosition.xyz,spherePosition[3].xyz,s)>=0) c = 0.0;
+	if (calcDiscriminant(vertexPosition.xyz,spherePosition[0].xyz,s)>=0) c = 0.2;
+	if (calcDiscriminant(vertexPosition.xyz,spherePosition[1].xyz,s)>=0) c = 0.2;
+	if (calcDiscriminant(vertexPosition.xyz,spherePosition[2].xyz,s)>=0) c = 0.2;
+	if (calcDiscriminant(vertexPosition.xyz,spherePosition[3].xyz,s)>=0) c = 0.2;
 
 	vec3 n = normalize(normalPosition.xyz);
 	s = reflect(-normalize(vertexPosition.xyz),n);

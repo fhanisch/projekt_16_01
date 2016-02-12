@@ -120,6 +120,7 @@ void initCircle(RenderObject *circle)
 	circle->indicesSize = 100*sizeof(GLuint);
 	circle->mProj = identity();
 	circle->mProj.m11 = (GLfloat)WND_HEIGHT/(GLfloat)WND_WIDTH;
+	circle->mView = identity();
 	circle->mModel = scale(0.25f, 0.25f, 0.25f);
 	circle->mModel = matMult(translate(-0.5f, -0.5f, 0.0f), circle->mModel);
 	circle->color = getColor(1.0f, 1.0f, 0.0f, 1.0f);	

@@ -348,35 +348,35 @@ void initObj(RenderObject *r)
 		printf("Size of Vertices: %d\n",r->verticesSize);
 	}
 
-	if(r->u!=NULL)
+	if (r->u!=NULL)
 	{
 		createVBO(&r->uID,r->uSize,r->u);
 		printf("uID: %i\n",r->uID);
 		printf("Size of u: %d\n",r->uSize);		
 	}
 
-	if(r->v!=NULL)
+	if (r->v!=NULL)
 	{
 		createVBO(&r->vID,r->vSize,r->v);
 		printf("vID: %i\n",r->vID);
 		printf("Size of v: %d\n",r->vSize);		
 	}
 
-	if(r->normals!=NULL)
+	if (r->normals!=NULL)
 	{
 		createVBO(&r->nboID, r->normalsSize, r->normals);
 		printf("nboID: %i\n",r->nboID);
 		printf("Size of normals: %d\n",r->normalsSize);
 	}
 
-	if(r->texCoords!=NULL)
+	if (r->texCoords!=NULL)
 	{
 		createVBO(&r->tcoID, r->texCoordsSize, r->texCoords);
 		printf("tcoID: %i\n",r->tcoID);
 		printf("Size of texCoords: %d\n",r->texCoordsSize);
 	}
 
-	if(r->indices!=NULL)
+	if (r->indices!=NULL)
 	{
 		createIBO(&r->iboID, r->indicesSize, r->indices);
 		printf("iboID: %i\n",r->iboID);
@@ -400,42 +400,42 @@ void drawObj(RenderObject *r)
 	glUniform4fv(r->colorHandle,1, (GLfloat*)&r->color);
 	glUniform1i(r->samplerHandle,0);
 			
-	if (r->vboID!=0)
+	if (r->vboID)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, r->vboID);
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 	
-	if(r->uID!=0)
+	if (r->uID)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, r->uID);
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
-	if(r->vID!=0)
+	if (r->vID)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, r->vID);
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
-	if(r->tcoID!=0)
+	if (r->tcoID)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, r->tcoID);
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
-	if(r->nboID!=0)
+	if (r->nboID)
 	{		
 		glBindBuffer(GL_ARRAY_BUFFER, r->nboID);
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
-	if(r->texID!=0) glBindTexture(GL_TEXTURE_2D,r->texID);
+	if (r->texID) glBindTexture(GL_TEXTURE_2D,r->texID);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, r->iboID);	
 	glDrawElements(r->renderMode, r->indicesLen, GL_UNSIGNED_INT, 0);

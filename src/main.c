@@ -120,6 +120,7 @@ int main(int argc, char **argv)
 			drawObj(&sphere[2]);
 			drawObj(&sphere[3]);
 			drawObj(&apfel);
+			//drawObj(&circle);
 		}
 
 		SDL_GL_SwapBuffers();		
