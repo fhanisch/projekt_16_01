@@ -41,6 +41,7 @@ int main(int argc, char **argv)
 	const GLubyte *vendor, *renderer, *oglVersion, *glslVersion;
 	RenderObject lines, triangle, rectangle, circle, stern, plane, cube, sphere[4], apfel;
 	MeshGridObject mesh;
+	Texture texBoden;
 
 	printf("Programm: %s\n",argv[0]+2);
 	memset(key,0,sizeof(key));
@@ -59,12 +60,16 @@ int main(int argc, char **argv)
 	printf("GLSL Version: %s\n", glslVersion);
 
 	genMeshGridObject(&mesh);
+	texBoden.texFileName="res/laminat.bmp";
+	loadTexture(&texBoden);
+	bindTexture(&texBoden);
 	initLines(&lines);
 	initTriangle(&triangle);
 	initRectangle(&rectangle);
 	initCircle(&circle);
 	initStern(&stern);
 	initPlane(&plane);
+	plane.texID = texBoden.texID;
 	initCube(&cube);
 	initSphere(&sphere[0], &mesh);
 	initSphere(&sphere[1], &mesh);
@@ -156,12 +161,12 @@ int main(int argc, char **argv)
 			if (key[SDLK_y])
 			{
 				rotAxis = cross(getXAxis(camera),getZAxis(camera));
-				camera = matMult(translate(rotAxis.x*0.01,rotAxis.y*0.01,rotAxis.z*0.01), camera);
+				camera = matMult(translate(rotAxis.x*0.02,rotAxis.y*0.02,rotAxis.z*0.02), camera);
 			}
 			if (key[SDLK_x])
 			{
 				rotAxis = cross(getXAxis(camera),getZAxis(camera));
-				camera = matMult(translate(rotAxis.x*-0.01,rotAxis.y*-0.01,rotAxis.z*-0.01), camera);
+				camera = matMult(translate(rotAxis.x*-0.02,rotAxis.y*-0.02,rotAxis.z*-0.02), camera);
 			}
 			if (key[SDLK_LEFT])
 			{

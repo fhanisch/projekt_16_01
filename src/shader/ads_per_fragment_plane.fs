@@ -5,9 +5,11 @@
 
 uniform mat4 mView;
 uniform vec4 color;
+uniform sampler2D samp;
 
 in vec4 vertexPosition;
 in vec4 normalPosition;
+in vec2 textureCoords;
 out vec4 FragColor;
 
 const vec3 lightSource = vec3(100.0, 100.0, 100.0);
@@ -69,31 +71,33 @@ vec3 calcSphereReflection(vec3 vertex, vec3 sphere, vec3 light, vec3 s, vec3 c, 
 }
 
 void main()
-{			
-	float c = 1.0;		
+{		
+	vec4 tex = texture2D(samp, textureCoords);
+	vec4 spherePosition[4];
+	float c = 1.0;	
 					
 	vec4 lightPosition = mView * vec4(lightSource, 1.0);
-	vec4 sphere1Position = mView * vec4(-5.0, 1.0, 0.0, 1.0);
-	vec4 sphere2Position = mView * vec4( 5.0, 1.0, 0.0, 1.0);
-	vec4 sphere3Position = mView * vec4( 0.0, 1.0, -5.0, 1.0);
-	vec4 sphere4Position = mView * vec4( 0.0, 1.0,  5.0, 1.0);
+	spherePosition[0] = mView * vec4(-5.0, 1.0, 0.0, 1.0);
+	spherePosition[1] = mView * vec4( 5.0, 1.0, 0.0, 1.0);
+	spherePosition[2] = mView * vec4( 0.0, 1.0, -5.0, 1.0);
+	spherePosition[3] = mView * vec4( 0.0, 1.0,  5.0, 1.0);
 			
-	vec3 ADS = calcADS(color.rgb, vertexPosition.xyz, normalPosition.xyz, lightPosition.xyz);
+	vec3 ADS = calcADS(tex.xyz, vertexPosition.xyz, normalPosition.xyz, lightPosition.xyz);
 	
 	vec3 s = normalize(lightPosition.xyz - vertexPosition.xyz);
-	if (calcDiscriminant(vertexPosition.xyz,sphere1Position.xyz,s)>=0) c = 0.0;
-	if (calcDiscriminant(vertexPosition.xyz,sphere2Position.xyz,s)>=0) c = 0.0;
-	if (calcDiscriminant(vertexPosition.xyz,sphere3Position.xyz,s)>=0) c = 0.0;
-	if (calcDiscriminant(vertexPosition.xyz,sphere4Position.xyz,s)>=0) c = 0.0;
+	if (calcDiscriminant(vertexPosition.xyz,spherePosition[0].xyz,s)>=0) c = 0.0;
+	if (calcDiscriminant(vertexPosition.xyz,spherePosition[1].xyz,s)>=0) c = 0.0;
+	if (calcDiscriminant(vertexPosition.xyz,spherePosition[2].xyz,s)>=0) c = 0.0;
+	if (calcDiscriminant(vertexPosition.xyz,spherePosition[3].xyz,s)>=0) c = 0.0;
 
 	vec3 n = normalize(normalPosition.xyz);
 	s = reflect(-normalize(vertexPosition.xyz),n);
 
-	ADS = calcSphereReflection(vertexPosition.xyz, sphere1Position.xyz, lightPosition.xyz, s, vec3(0.0, 0.0, 1.0), ADS);	
-	ADS = calcSphereReflection(vertexPosition.xyz, sphere2Position.xyz, lightPosition.xyz, s, vec3(1.0, 1.0, 0.0), ADS);
-	ADS = calcSphereReflection(vertexPosition.xyz, sphere3Position.xyz, lightPosition.xyz, s, vec3(1.0, 0.0, 0.0), ADS);
-	ADS = calcSphereReflection(vertexPosition.xyz, sphere4Position.xyz, lightPosition.xyz, s, vec3(1.0, 0.0, 1.0), ADS);
-		
+	ADS = calcSphereReflection(vertexPosition.xyz, spherePosition[0].xyz, lightPosition.xyz, s, vec3(0.0, 0.0, 1.0), ADS);	
+	ADS = calcSphereReflection(vertexPosition.xyz, spherePosition[1].xyz, lightPosition.xyz, s, vec3(1.0, 1.0, 0.0), ADS);
+	ADS = calcSphereReflection(vertexPosition.xyz, spherePosition[2].xyz, lightPosition.xyz, s, vec3(1.0, 0.0, 0.0), ADS);
+	ADS = calcSphereReflection(vertexPosition.xyz, spherePosition[3].xyz, lightPosition.xyz, s, vec3(1.0, 0.0, 1.0), ADS);
+	
 	FragColor = vec4(c*ADS, 1.0);	
 }
 

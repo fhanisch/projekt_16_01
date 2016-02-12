@@ -41,13 +41,21 @@ typedef struct
 
 typedef struct
 {
-	GLuint vertexShader, fragmentShader, shaderProgram, vboID, nboID, iboID, uID, vID;
-	GLint mProjHandle, mViewHandle, mModelHandle, colorHandle;
+	GLchar *texFileName;
+	GLubyte *texture;
+	GLuint texID;
+	int xTexSize, yTexSize;
+} Texture;
+
+typedef struct
+{
+	GLuint vertexShader, fragmentShader, shaderProgram, vboID, nboID, iboID, uID, vID, tcoID, texID;
+	GLint mProjHandle, mViewHandle, mModelHandle, colorHandle, samplerHandle;
 	GLenum renderMode;
 	GLchar *vertex_shader_filename, *fragment_shader_filename;
 	GLchar *vertex_shader_text, *fragment_shader_text;
-	GLfloat *vertices, *normals, *u, *v;
-	GLuint verticesSize, normalsSize, uSize, vSize;
+	GLfloat *vertices, *normals, *u, *v, *texCoords;
+	GLuint verticesSize, normalsSize, uSize, vSize, texCoordsSize;
 	GLuint *indices;
 	GLuint indicesLen;
 	GLuint indicesSize;
@@ -60,6 +68,8 @@ typedef struct
 Matrix4 camera;
 
 int loadShader(GLchar **shaderStr, char *fileName);
+int loadTexture (Texture *tex);
+void bindTexture(Texture *tex);
 GLuint createShader(GLenum shaderType, const GLchar *shaderStr);
 GLuint createShaderProgram(GLuint vertexShader, GLuint fragmentShader);
 void createVBO(GLuint *vboID, GLuint verticesSize, GLfloat *vertices);

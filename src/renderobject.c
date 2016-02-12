@@ -28,6 +28,56 @@ int loadShader(GLchar **shaderStr, char *fileName)
 	return 0;
 }
 
+int loadTexture (Texture *tex)
+{
+	char signature[2];
+	unsigned short  farbtiefe;	
+	uint offset;
+	uint bytePtr=0;
+	uint x,y;
+		
+	FILE *file = fopen (tex->texFileName,"r");
+	fseek(file,0,SEEK_SET);
+	fread(signature,2,1,file);
+	printf("Bitmap Signature: %c%c\n", signature[0],signature[1]);
+	fseek(file,28,SEEK_SET);
+	fread(&farbtiefe,2,1,file);
+	printf("Farbtiefe: %i\n", farbtiefe);
+	fseek(file,18,SEEK_SET);
+	fread(&tex->xTexSize,4,1,file);
+	fread(&tex->yTexSize,4,1,file);
+	printf("Texture size: %i x %i\n", tex->xTexSize, tex->yTexSize);
+	tex->texture = malloc(tex->xTexSize*tex->yTexSize*4);
+	fseek(file,10,SEEK_SET);
+	fread(&offset,4,1,file);
+	printf("Offset: %i\n",offset);
+	fseek(file,offset,SEEK_SET);
+	for (y=0;y<tex->yTexSize;y++)
+	{
+		for (x=0;x<tex->xTexSize;x++)
+		{
+			fread(tex->texture+bytePtr+2,1,1,file);
+			fread(tex->texture+bytePtr+1,1,1,file);
+			fread(tex->texture+bytePtr,1,1,file);
+			tex->texture[bytePtr+3] = 0xff;
+			bytePtr+=4;
+		}
+		fseek(file,tex->xTexSize%4,SEEK_CUR);
+	}
+
+	fclose(file);
+	return 0;
+}
+
+void bindTexture(Texture *tex)
+{	
+	glGenTextures(1, &tex->texID);
+	glBindTexture(GL_TEXTURE_2D,tex->texID);
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, tex->xTexSize, tex->yTexSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->texture);
+}
+
 GLuint createShader(GLenum shaderType, const GLchar *shaderStr)
 {
 	GLuint shader;
@@ -319,6 +369,13 @@ void initObj(RenderObject *r)
 		printf("Size of normals: %d\n",r->normalsSize);
 	}
 
+	if(r->texCoords!=NULL)
+	{
+		createVBO(&r->tcoID, r->texCoordsSize, r->texCoords);
+		printf("tcoID: %i\n",r->tcoID);
+		printf("Size of texCoords: %d\n",r->texCoordsSize);
+	}
+
 	if(r->indices!=NULL)
 	{
 		createIBO(&r->iboID, r->indicesSize, r->indices);
@@ -329,7 +386,8 @@ void initObj(RenderObject *r)
 	r->mProjHandle = glGetUniformLocation(r->shaderProgram,"mProj");
 	r->mViewHandle = glGetUniformLocation(r->shaderProgram,"mView");
 	r->mModelHandle = glGetUniformLocation(r->shaderProgram,"mModel");
-	r->colorHandle = glGetUniformLocation(r->shaderProgram,"color");		
+	r->colorHandle = glGetUniformLocation(r->shaderProgram,"color");
+	r->samplerHandle = glGetUniformLocation(r->shaderProgram,"samp");
 }
 
 void drawObj(RenderObject *r)
@@ -340,6 +398,7 @@ void drawObj(RenderObject *r)
 	glUniformMatrix4fv(r->mViewHandle,1, GL_TRUE, (GLfloat*)&camera);
 	glUniformMatrix4fv(r->mModelHandle,1, GL_TRUE, (GLfloat*)&r->mModel);
 	glUniform4fv(r->colorHandle,1, (GLfloat*)&r->color);
+	glUniform1i(r->samplerHandle,0);
 			
 	if (r->vboID!=0)
 	{
@@ -362,12 +421,21 @@ void drawObj(RenderObject *r)
 		glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
+	if(r->tcoID!=0)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, r->tcoID);
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	}
+
 	if(r->nboID!=0)
 	{		
 		glBindBuffer(GL_ARRAY_BUFFER, r->nboID);
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	}
+
+	if(r->texID!=0) glBindTexture(GL_TEXTURE_2D,r->texID);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, r->iboID);	
 	glDrawElements(r->renderMode, r->indicesLen, GL_UNSIGNED_INT, 0);
