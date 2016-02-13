@@ -24,7 +24,8 @@ void initZero(RenderObject *o)
 	o->vID = 0;
 	o->iboID = 0;
 	o->tcoID = 0;
-	o->texID = 0;
+	o->texID[0] = 0;
+	o->texID[1] = 0;
 }
 
 void initLines(RenderObject *lines)

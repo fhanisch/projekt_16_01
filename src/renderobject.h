@@ -49,8 +49,8 @@ typedef struct
 
 typedef struct
 {
-	GLuint vertexShader, fragmentShader, shaderProgram, vboID, nboID, iboID, uID, vID, tcoID, texID;
-	GLint mProjHandle, mViewHandle, mModelHandle, colorHandle, samplerHandle;
+	GLuint vertexShader, fragmentShader, shaderProgram, vboID, nboID, iboID, uID, vID, tcoID, texID[2];
+	GLint mProjHandle, mViewHandle, mModelHandle, colorHandle, samplerHandle[2];
 	GLenum renderMode;
 	GLchar *vertex_shader_filename, *fragment_shader_filename;
 	GLchar *vertex_shader_text, *fragment_shader_text;

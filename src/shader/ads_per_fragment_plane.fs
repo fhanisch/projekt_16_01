@@ -6,6 +6,7 @@
 uniform mat4 mView;
 uniform vec4 color;
 uniform sampler2D samp;
+uniform sampler2D samp2;
 
 in vec4 vertexPosition;
 in vec4 normalPosition;
@@ -72,7 +73,9 @@ vec3 calcSphereReflection(vec3 vertex, vec3 sphere, vec3 light, vec3 s, vec3 c, 
 
 void main()
 {		
-	vec4 tex = texture2D(samp, textureCoords);
+	vec4 tex1 = texture2D(samp, textureCoords);
+	vec4 tex2 = texture2D(samp2, textureCoords);
+	vec4 tex = mix(tex1,tex2,0.5);
 	vec4 spherePosition[4];
 	float c = 1.0;	
 					

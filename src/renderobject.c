@@ -387,7 +387,8 @@ void initObj(RenderObject *r)
 	r->mViewHandle = glGetUniformLocation(r->shaderProgram,"mView");
 	r->mModelHandle = glGetUniformLocation(r->shaderProgram,"mModel");
 	r->colorHandle = glGetUniformLocation(r->shaderProgram,"color");
-	r->samplerHandle = glGetUniformLocation(r->shaderProgram,"samp");
+	r->samplerHandle[0] = glGetUniformLocation(r->shaderProgram,"samp");
+	r->samplerHandle[1] = glGetUniformLocation(r->shaderProgram,"samp2");
 }
 
 void drawObj(RenderObject *r)
@@ -398,7 +399,9 @@ void drawObj(RenderObject *r)
 	glUniformMatrix4fv(r->mViewHandle,1, GL_TRUE, (GLfloat*)&camera);
 	glUniformMatrix4fv(r->mModelHandle,1, GL_TRUE, (GLfloat*)&r->mModel);
 	glUniform4fv(r->colorHandle,1, (GLfloat*)&r->color);
-	glUniform1i(r->samplerHandle,0);
+
+	if (r->samplerHandle[0]>=0) glUniform1i(r->samplerHandle[0],0);
+	if (r->samplerHandle[1]>=0) glUniform1i(r->samplerHandle[1],1);
 			
 	if (r->vboID)
 	{
@@ -435,7 +438,8 @@ void drawObj(RenderObject *r)
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 
-	if (r->texID) glBindTexture(GL_TEXTURE_2D,r->texID);
+	if (r->texID[0]) glBindTexture(GL_TEXTURE_2D,r->texID[0]);
+	if (r->texID[1]) glBindTexture(GL_TEXTURE_2D,r->texID[1]);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, r->iboID);	
 	glDrawElements(r->renderMode, r->indicesLen, GL_UNSIGNED_INT, 0);
