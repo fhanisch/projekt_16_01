@@ -1,6 +1,25 @@
 //renderobject.h
 //Erstellt: 30.01.2016
 
+//Vertex Shader
+#define	GENERIC_VS_FILENAME			"src/shader/generic.vs"
+#define CIRCLE_VS_FILENAME			"src/shader/circle.vs"
+#define DIFFUSE_PER_VERTEX_VS_FILENAME		"src/shader/diffuse_per_vertex.vs"
+#define ADS_PER_FRAGMENT_VS_FILENAME		"src/shader/ads_per_fragment.vs"
+#define SPHERE_ADS_PER_FRAGMENT_VS_FILENAME	"src/shader/sphere_ads_per_fragment.vs"
+#define APFEL_VS_FILENAME			"src/shader/apfel.vs"
+
+//Fragment Shader
+#define	GENERIC_FS_FILENAME			"src/shader/generic.fs"
+#define ADS_PER_FRAGMENT_FS_FILENAME		"src/shader/ads_per_fragment.fs"
+#define ADS_PER_FRAGMENT_PLANE_FS_FILENAME	"src/shader/ads_per_fragment_plane.fs"
+
+typedef GLchar VertexShaderStr;
+typedef GLchar FragmentShaderStr;
+typedef GLuint VertexShader;
+typedef GLuint FragmentShader;
+typedef GLuint ShaderProgram;
+
 typedef unsigned int uint;
 
 typedef struct
@@ -49,11 +68,8 @@ typedef struct
 
 typedef struct
 {
-	GLuint vertexShader, fragmentShader, shaderProgram, vboID, nboID, iboID, uID, vID, tcoID, texID[2];
-	GLint mProjHandle, mViewHandle, mModelHandle, colorHandle, samplerHandle[2];
-	GLenum renderMode;
-	GLchar *vertex_shader_filename, *fragment_shader_filename;
-	GLchar *vertex_shader_text, *fragment_shader_text;
+	GLuint shaderProgram, vboID, nboID, iboID, uID, vID, tcoID, texID[2];
+	GLint mProjHandle, mViewHandle, mModelHandle, colorHandle, samplerHandle[2];		
 	GLfloat *vertices, *normals, *u, *v, *texCoords;
 	GLuint verticesSize, normalsSize, uSize, vSize, texCoordsSize;
 	GLuint *indices;
@@ -61,10 +77,16 @@ typedef struct
 	GLuint indicesSize;
 	Matrix4 mProj;
 	Matrix4 mView;
-	Matrix4 mModel;	
+	Matrix4 mModel;
+	GLenum renderMode;
 	Color color;	
 } RenderObject;
 
+VertexShaderStr		*generic_vs_str, *circle_vs_str, *ads_per_fragment_vs_str, *sphere_ads_per_fragment_vs_str, *apfel_vs_str;
+FragmentShaderStr	*generic_fs_str, *ads_per_fragment_fs_str, *ads_per_fragment_plane_fs_str;
+VertexShader		generic_vs, circle_vs, ads_per_fragment_vs, sphere_ads_per_fragment_vs, apfel_vs;
+FragmentShader		generic_fs, ads_per_fragment_fs, ads_per_fragment_plane_fs;
+ShaderProgram		generic_sp, ads_per_fragment_sp, circle_sp, boden_sp, sphere_sp, apfel_sp;
 Matrix4 camera;
 
 int loadShader(GLchar **shaderStr, char *fileName);
@@ -72,6 +94,7 @@ int loadTexture (Texture *tex);
 void bindTexture(Texture *tex);
 GLuint createShader(GLenum shaderType, const GLchar *shaderStr);
 GLuint createShaderProgram(GLuint vertexShader, GLuint fragmentShader);
+void genShaderPrograms();
 void createVBO(GLuint *vboID, GLuint verticesSize, GLfloat *vertices);
 void createIBO(GLuint *iboID, GLuint indicesSize, GLuint *indices);
 Color getColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);

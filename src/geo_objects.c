@@ -28,19 +28,16 @@ void initZero(RenderObject *o)
 	o->texID[1] = 0;
 }
 
-void initLines(RenderObject *lines)
+void initLines(RenderObject *lines, ShaderProgram sp)
 {	
 	initZero(lines);		
-	GLchar vertex_shader_filename[] = "src/shader/generic.vs";
-	GLchar fragment_shader_filename[] = "src/shader/generic.fs";
+	lines->shaderProgram = sp;
 	GLfloat vertices[] = {	 0.0f,-1.0f, 0.0f,
 			 	-1.0f, 0.0f, 0.0f,
 			 	 0.0f, 1.0f, 0.0f,
 				 1.0f, 0.0f, 0.0f};
 	GLuint indices[] = {0,2,1,3};
-	
-	lines->vertex_shader_filename = vertex_shader_filename;	
-	lines->fragment_shader_filename = fragment_shader_filename;	
+		
 	lines->vertices = vertices;
 	lines->verticesSize = sizeof(vertices);
 	lines->indices = indices;
@@ -53,18 +50,15 @@ void initLines(RenderObject *lines)
 	initObj(lines);	
 }
 
-void initTriangle(RenderObject *triangle)
+void initTriangle(RenderObject *triangle, ShaderProgram sp)
 {	
-	initZero(triangle);		
-	GLchar vertex_shader_filename[] = "src/shader/generic.vs";
-	GLchar fragment_shader_filename[] = "src/shader/generic.fs";
+	initZero(triangle);
+	triangle->shaderProgram = sp;			
 	GLfloat vertices[] = {	-1.0f,-1.0f, 0.0f,
 			 	 1.0f,-1.0f, 0.0f,
 			 	 0.0f, 1.0f, 0.0f};
 	GLuint indices[] = {0,1,2};
-	
-	triangle->vertex_shader_filename = vertex_shader_filename;	
-	triangle->fragment_shader_filename = fragment_shader_filename;	
+		
 	triangle->vertices = vertices;
 	triangle->verticesSize = sizeof(vertices);
 	triangle->indices = indices;
@@ -79,19 +73,16 @@ void initTriangle(RenderObject *triangle)
 	initObj(triangle);
 }
 
-void initRectangle(RenderObject *rect)
+void initRectangle(RenderObject *rect, ShaderProgram sp)
 {	
 	initZero(rect);	
-	GLchar vertex_shader_filename[] = "src/shader/generic.vs";
-	GLchar fragment_shader_filename[] = "src/shader/generic.fs";
+	rect->shaderProgram = sp;
 	GLfloat vertices[] = {	-1.0f,-1.0f, 0.0f,
 			 	 1.0f,-1.0f, 0.0f,
 			 	-1.0f, 1.0f, 0.0f,
 				 1.0f, 1.0f, 0.0f};
 	GLuint indices[] = {0,1,2,3};
 	
-	rect->vertex_shader_filename = vertex_shader_filename;	
-	rect->fragment_shader_filename = fragment_shader_filename;	
 	rect->vertices = vertices;
 	rect->verticesSize = sizeof(vertices);
 	rect->indices = indices;
@@ -106,14 +97,11 @@ void initRectangle(RenderObject *rect)
 	initObj(rect);
 }
 
-void initCircle(RenderObject *circle)
+void initCircle(RenderObject *circle, ShaderProgram sp)
 {
 	initZero(circle);
-	GLchar vertex_shader_filename[] = "src/shader/circle.vs";
-	GLchar fragment_shader_filename[] = "src/shader/generic.fs";
-	
-	circle->vertex_shader_filename = vertex_shader_filename;	
-	circle->fragment_shader_filename = fragment_shader_filename;		
+	circle->shaderProgram = sp;
+		
 	circle->u = vecf(0.0f, 1.0f, 100);
 	circle->uSize = 100*sizeof(GLfloat);
 	circle->indices = veci(0,100);
@@ -129,11 +117,10 @@ void initCircle(RenderObject *circle)
 	initObj(circle);
 }
 
-void initStern(RenderObject *stern)
+void initStern(RenderObject *stern, ShaderProgram sp)
 {		
-	initZero(stern);	
-	GLchar vertex_shader_filename[] = "src/shader/generic.vs";
-	GLchar fragment_shader_filename[] = "src/shader/generic.fs";
+	initZero(stern);
+	stern->shaderProgram = sp;		
 
 	GLfloat vertices[] = {	   0.0f,  -1.0f, 0.0f,
 			 	  0.25f, -0.25f, 0.0f,
@@ -145,9 +132,7 @@ void initStern(RenderObject *stern)
 				 -0.25f, -0.25f, 0.0f};
 
 	GLuint indices[] = {0,1,7, 1,2,3, 3,4,5, 5,6,7, 1,3,5, 5,7,1};
-	
-	stern->vertex_shader_filename = vertex_shader_filename;	
-	stern->fragment_shader_filename = fragment_shader_filename;	
+		
 	stern->vertices = vertices;
 	stern->verticesSize = sizeof(vertices);
 	stern->indices = indices;
@@ -163,11 +148,11 @@ void initStern(RenderObject *stern)
 	initObj(stern);
 }
 
-void initPlane(RenderObject *plane)
+void initPlane(RenderObject *plane, ShaderProgram sp)
 {
 	initZero(plane);
-	GLchar vertex_shader_filename[] = "src/shader/ads_per_fragment.vs";
-	GLchar fragment_shader_filename[] = "src/shader/ads_per_fragment_plane.fs";
+	plane->shaderProgram = sp;
+	
 	GLfloat vertices[] = {	-1.0f, 0.0f, -1.0f,
 			 	 1.0f, 0.0f, -1.0f,
 			 	-1.0f, 0.0f,  1.0f,
@@ -184,8 +169,6 @@ void initPlane(RenderObject *plane)
 				8.0f, 0.0f};
 	GLuint indices[] = {0,1,2,3};
 	
-	plane->vertex_shader_filename = vertex_shader_filename;	
-	plane->fragment_shader_filename = fragment_shader_filename;	
 	plane->vertices = vertices;
 	plane->verticesSize = sizeof(vertices);
 	plane->normals = normals;
@@ -203,11 +186,11 @@ void initPlane(RenderObject *plane)
 	initObj(plane);
 }
 
-void initCube(RenderObject *cube)
+void initCube(RenderObject *cube, ShaderProgram sp)
 {
 	initZero(cube);
-	GLchar vertex_shader_filename[] = "src/shader/ads_per_fragment.vs";
-	GLchar fragment_shader_filename[] = "src/shader/ads_per_fragment.fs";
+	cube->shaderProgram = sp;
+	
 	GLfloat vertices[] = {	-1.0f, -1.0f, -1.0f,
 			 	 1.0f, -1.0f, -1.0f,
 			 	-1.0f, -1.0f,  1.0f,
@@ -269,9 +252,7 @@ void initCube(RenderObject *cube)
 				-1.0f,  0.0f,  0.0f};
 
 	GLuint indices[] = {0,1,3,2, 4,5,7,6, 8,9,11,10, 12,13,15,14, 16,17,19,18, 20,21,23,22};
-	
-	cube->vertex_shader_filename = vertex_shader_filename;	
-	cube->fragment_shader_filename = fragment_shader_filename;	
+		
 	cube->vertices = vertices;
 	cube->verticesSize = sizeof(vertices);
 	cube->normals = normals;
@@ -287,14 +268,11 @@ void initCube(RenderObject *cube)
 	initObj(cube);
 }
 
-void initSphere(RenderObject *sphere, MeshGridObject *mesh)
+void initSphere(RenderObject *sphere, ShaderProgram sp, MeshGridObject *mesh)
 {
 	initZero(sphere);
-	GLchar vertex_shader_filename[] = "src/shader/sphere_ads_per_fragment.vs";
-	GLchar fragment_shader_filename[] = "src/shader/ads_per_fragment.fs";
-	
-	sphere->vertex_shader_filename = vertex_shader_filename;	
-	sphere->fragment_shader_filename = fragment_shader_filename;		
+	sphere->shaderProgram = sp;	
+		
 	sphere->mProj = setFrustum(0.25*(GLfloat)WND_WIDTH/(GLfloat)WND_HEIGHT,0.25,0.5,100.0);
 	sphere->mModel = scale(1.0f, 1.0f, 1.0f);
 	sphere->mModel = matMult(translate(0.0f, 0.0f, 0.0f), sphere->mModel);
@@ -307,14 +285,11 @@ void initSphere(RenderObject *sphere, MeshGridObject *mesh)
 	sphere->indicesLen = mesh->indicesLen;
 }
 
-void initApfel(RenderObject *apfel, MeshGridObject *mesh)
+void initApfel(RenderObject *apfel, ShaderProgram sp, MeshGridObject *mesh)
 {
 	initZero(apfel);
-	GLchar vertex_shader_filename[] = "src/shader/apfel.vs";
-	GLchar fragment_shader_filename[] = "src/shader/ads_per_fragment.fs";
-	
-	apfel->vertex_shader_filename = vertex_shader_filename;	
-	apfel->fragment_shader_filename = fragment_shader_filename;		
+	apfel->shaderProgram = sp;
+		
 	apfel->mProj = setFrustum(0.25*(GLfloat)WND_WIDTH/(GLfloat)WND_HEIGHT,0.25,0.5,100.0);
 	apfel->mModel = scale(1.0f, 1.0f, 1.0f);
 	apfel->mModel = matMult(translate(0.0f, 0.0f, 0.0f), apfel->mModel);

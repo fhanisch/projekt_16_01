@@ -60,6 +60,8 @@ int main(int argc, char **argv)
 	printf("OpenGL Version: %s\n",oglVersion);
 	printf("GLSL Version: %s\n", glslVersion);
 
+	genShaderPrograms();
+
 	genMeshGridObject(&mesh);
 	texBoden.texFileName="res/laminat.bmp";	
 	texFliessen.texFileName = "res/fliessen.bmp";
@@ -70,21 +72,21 @@ int main(int argc, char **argv)
 	glActiveTexture(GL_TEXTURE1);
 	bindTexture(&texFliessen);
 	
-	initLines(&lines);
-	initTriangle(&triangle);
-	initRectangle(&rectangle);
-	initCircle(&circle);
-	initStern(&stern);
+	initLines(&lines, generic_sp);
+	initTriangle(&triangle, generic_sp);
+	initRectangle(&rectangle, generic_sp);
+	initCircle(&circle, circle_sp);
+	initStern(&stern, generic_sp);
 	
-	initPlane(&plane);
+	initPlane(&plane, boden_sp);
 	plane.texID[0] = texBoden.texID;
 	plane.texID[1] = texFliessen.texID;
-	initCube(&cube);
-	initSphere(&sphere[0], &mesh);
-	initSphere(&sphere[1], &mesh);
-	initSphere(&sphere[2], &mesh);
-	initSphere(&sphere[3], &mesh);
-	initApfel(&apfel, &mesh);
+	initCube(&cube, ads_per_fragment_sp);
+	initSphere(&sphere[0], sphere_sp, &mesh);
+	initSphere(&sphere[1], sphere_sp, &mesh);
+	initSphere(&sphere[2], sphere_sp, &mesh);
+	initSphere(&sphere[3], sphere_sp, &mesh);
+	initApfel(&apfel, apfel_sp, &mesh);
 	camera = identity();
 
 	cube.mModel = matMult(translate(0.0, 5.0, 0.0), cube.mModel);

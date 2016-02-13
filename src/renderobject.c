@@ -99,6 +99,41 @@ GLuint createShaderProgram(GLuint vertexShader, GLuint fragmentShader)
 	return shaderProgram;
 }
 
+void genShaderPrograms()
+{
+	//Load Vertex Shader
+	loadShader(&generic_vs_str, GENERIC_VS_FILENAME);
+	loadShader(&circle_vs_str, CIRCLE_VS_FILENAME);
+	loadShader(&ads_per_fragment_vs_str, ADS_PER_FRAGMENT_VS_FILENAME);
+	loadShader(&sphere_ads_per_fragment_vs_str, SPHERE_ADS_PER_FRAGMENT_VS_FILENAME);
+	loadShader(&apfel_vs_str, APFEL_VS_FILENAME);
+
+	//Load Fragment Shader
+	loadShader(&generic_fs_str, GENERIC_FS_FILENAME);
+	loadShader(&ads_per_fragment_fs_str, ADS_PER_FRAGMENT_FS_FILENAME);
+	loadShader(&ads_per_fragment_plane_fs_str, ADS_PER_FRAGMENT_PLANE_FS_FILENAME);
+
+	//Create Vertex Shader
+	generic_vs = createShader(GL_VERTEX_SHADER, generic_vs_str);
+	circle_vs = createShader(GL_VERTEX_SHADER, circle_vs_str);
+	ads_per_fragment_vs = createShader(GL_VERTEX_SHADER, ads_per_fragment_vs_str);
+	sphere_ads_per_fragment_vs = createShader(GL_VERTEX_SHADER, sphere_ads_per_fragment_vs_str);
+	apfel_vs = createShader(GL_VERTEX_SHADER, apfel_vs_str);
+
+	//Create Fragment Shader
+	generic_fs = createShader(GL_FRAGMENT_SHADER, generic_fs_str);
+	ads_per_fragment_fs = createShader(GL_FRAGMENT_SHADER, ads_per_fragment_fs_str);
+	ads_per_fragment_plane_fs = createShader(GL_FRAGMENT_SHADER, ads_per_fragment_plane_fs_str);
+
+	//Create Shader Programs
+	generic_sp = createShaderProgram(generic_vs, generic_fs);
+	circle_sp = createShaderProgram(circle_vs, generic_fs);
+	ads_per_fragment_sp = createShaderProgram(ads_per_fragment_vs, ads_per_fragment_fs);
+	boden_sp = createShaderProgram(ads_per_fragment_vs, ads_per_fragment_plane_fs);
+	sphere_sp = createShaderProgram(sphere_ads_per_fragment_vs, ads_per_fragment_fs);
+	apfel_sp = createShaderProgram(apfel_vs, ads_per_fragment_fs);
+}
+
 void createVBO(GLuint *vboID, GLuint verticesSize, GLfloat *vertices)
 {	
 	glGenBuffers(1,vboID);
@@ -331,16 +366,7 @@ void genMeshGridObject(MeshGridObject *meshGridObj)
 }
 
 void initObj(RenderObject *r)
-{
-	loadShader(&r->vertex_shader_text, r->vertex_shader_filename);
-	loadShader(&r->fragment_shader_text, r->fragment_shader_filename);
-	r->vertexShader = createShader(GL_VERTEX_SHADER, r->vertex_shader_text);
-	printf("vertexShader %i\n",r->vertexShader);
-	r->fragmentShader = createShader(GL_FRAGMENT_SHADER, r->fragment_shader_text);
-	printf("fragmentShader %i\n",r->fragmentShader);
-	r->shaderProgram = createShaderProgram(r->vertexShader, r->fragmentShader);
-	printf("shaderProgram %i\n",r->shaderProgram);
-
+{	
 	if (r->vertices!=NULL)	
 	{
 		createVBO(&r->vboID,r->verticesSize,r->vertices);
