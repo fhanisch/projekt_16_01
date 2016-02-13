@@ -39,10 +39,10 @@ int main(int argc, char **argv)
 	int mouseY = 0;
 	Vector3 rotAxis;
 	const GLubyte *vendor, *renderer, *oglVersion, *glslVersion;
-	RenderObject lines, triangle, rectangle, circle, stern, plane, cube, apfel;
+	RenderObject lines, triangle, rectangle, circle, stern, plane, cube, apfel, steine;
 	RenderObject *sphere = malloc(4*sizeof(RenderObject));	
 	MeshGridObject mesh;
-	Texture texBoden, texFliessen;
+	Texture texBoden, texFliessen, texSteine, texSteineNorm;
 
 	printf("Programm: %s\n",argv[0]+2);
 	memset(key,0,sizeof(key));
@@ -65,12 +65,18 @@ int main(int argc, char **argv)
 	genMeshGridObject(&mesh);
 	texBoden.texFileName="res/laminat.bmp";	
 	texFliessen.texFileName = "res/fliessen.bmp";
+	texSteine.texFileName = "res/pflaster.bmp";
+	texSteineNorm.texFileName = "res/brick.bmp";
 	loadTexture(&texBoden);
 	loadTexture(&texFliessen);
+	loadTexture(&texSteine);
+	loadTexture(&texSteineNorm);
 	glActiveTexture(GL_TEXTURE0);
 	bindTexture(&texBoden);
+	bindTexture(&texSteine);
 	glActiveTexture(GL_TEXTURE1);
 	bindTexture(&texFliessen);
+	bindTexture(&texSteineNorm);
 	
 	initLines(&lines, generic_sp);
 	initTriangle(&triangle, generic_sp);
@@ -87,8 +93,12 @@ int main(int argc, char **argv)
 	initSphere(&sphere[2], sphere_sp, &mesh);
 	initSphere(&sphere[3], sphere_sp, &mesh);
 	initApfel(&apfel, apfel_sp, &mesh);
+	initPlane(&steine, normal_mapping_sp);	
+	steine.texID[0] = texSteine.texID;
+	steine.texID[1] = texSteineNorm.texID;
 	camera = identity();
 
+	plane.mModel = matMult(scale(20.0, 1.0, 20.0), plane.mModel);
 	cube.mModel = matMult(translate(0.0, 5.0, 0.0), cube.mModel);
 	sphere[0].mModel = matMult(translate(0.0, 1.0, -5.0), sphere[0].mModel);	
 	sphere[1].mModel = matMult(translate(0.0, 1.0, 5.0), sphere[1].mModel);
@@ -100,6 +110,8 @@ int main(int argc, char **argv)
 	apfel.mModel = matMult(rotateX(-0.5), apfel.mModel);
 	apfel.mModel = matMult(rotateY(0.1), apfel.mModel);
 	apfel.mModel = matMult(translate(0.0, 0.85, 0.0), apfel.mModel);
+	steine.mModel = matMult(scale(2.0, 1.0, 2.0), steine.mModel);
+	steine.mModel = matMult(translate(0.0, 0.01, 0.0), steine.mModel);
 
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -130,7 +142,8 @@ int main(int argc, char **argv)
 			drawObj(&sphere[1]);
 			drawObj(&sphere[2]);
 			drawObj(&sphere[3]);
-			drawObj(&apfel);
+			//drawObj(&apfel);
+			drawObj(&steine);
 			//drawObj(&circle);
 		}
 

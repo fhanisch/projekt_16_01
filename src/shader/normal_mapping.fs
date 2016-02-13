@@ -1,11 +1,12 @@
 //fragment shader
-//Erstellt: 04.02.2016
+//Erstellt: 13.02.2016
 
 #version 440
 
 uniform mat4 mView;
 uniform vec4 color;
 uniform sampler2D samp;
+uniform sampler2D samp2;
 
 in vec4 vertexPosition;
 in vec4 normalPosition;
@@ -33,11 +34,16 @@ vec3 calcADS(vec3 c, vec3 vertex, vec3 normal, vec3 light)
 }
 
 void main()
-{						
-	vec4 lightPosition = mView * vec4(lightSource, 1.0);
-					
-	vec3 ADS = calcADS(color.rgb, vertexPosition.xyz, normalPosition.xyz, lightPosition.xyz);
+{	
+	vec4 tex1 = texture2D(samp, textureCoords/2.0);				
+	vec4 norm = texture2D(samp2, textureCoords/2.0);
 
-	FragColor = vec4(ADS, 1.0);	
+	vec4 lightPosition = mView * vec4(lightSource, 1.0);
+
+	vec4 normPosition = transpose(inverse(mView)) * norm;
+					
+	vec3 ADS = calcADS(vec3(0.1, 0.1, 0.1), vertexPosition.xyz, normPosition.xyz, lightPosition.xyz);
+
+	FragColor = vec4(ADS, 1.0);
 }
 

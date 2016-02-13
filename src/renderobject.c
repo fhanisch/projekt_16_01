@@ -112,6 +112,7 @@ void genShaderPrograms()
 	loadShader(&generic_fs_str, GENERIC_FS_FILENAME);
 	loadShader(&ads_per_fragment_fs_str, ADS_PER_FRAGMENT_FS_FILENAME);
 	loadShader(&ads_per_fragment_plane_fs_str, ADS_PER_FRAGMENT_PLANE_FS_FILENAME);
+	loadShader(&normal_mapping_fs_str, NORMAL_MAPPING_FS_FILENAME);
 
 	//Create Vertex Shader
 	generic_vs = createShader(GL_VERTEX_SHADER, generic_vs_str);
@@ -124,6 +125,7 @@ void genShaderPrograms()
 	generic_fs = createShader(GL_FRAGMENT_SHADER, generic_fs_str);
 	ads_per_fragment_fs = createShader(GL_FRAGMENT_SHADER, ads_per_fragment_fs_str);
 	ads_per_fragment_plane_fs = createShader(GL_FRAGMENT_SHADER, ads_per_fragment_plane_fs_str);
+	normal_mapping_fs = createShader(GL_FRAGMENT_SHADER, normal_mapping_fs_str);
 
 	//Create Shader Programs
 	generic_sp = createShaderProgram(generic_vs, generic_fs);
@@ -132,6 +134,7 @@ void genShaderPrograms()
 	boden_sp = createShaderProgram(ads_per_fragment_vs, ads_per_fragment_plane_fs);
 	sphere_sp = createShaderProgram(sphere_ads_per_fragment_vs, ads_per_fragment_fs);
 	apfel_sp = createShaderProgram(apfel_vs, ads_per_fragment_fs);
+	normal_mapping_sp = createShaderProgram(ads_per_fragment_vs, normal_mapping_fs);
 }
 
 void createVBO(GLuint *vboID, GLuint verticesSize, GLfloat *vertices)

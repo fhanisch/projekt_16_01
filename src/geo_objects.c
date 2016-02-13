@@ -179,7 +179,7 @@ void initPlane(RenderObject *plane, ShaderProgram sp)
 	plane->indicesLen = 4;
 	plane->indicesSize = sizeof(indices);
 	plane->mProj = setFrustum(0.25*(GLfloat)WND_WIDTH/(GLfloat)WND_HEIGHT,0.25,0.5,100.0);
-	plane->mModel = scale(20.0f, 20.0f, 20.0f);
+	plane->mModel = scale(1.0f, 1.0f, 1.0f);
 	plane->mModel = matMult(translate(0.0f, 0.0f, 0.0f), plane->mModel);
 	plane->color = getColor(1.0f, 1.0f, 1.0f, 1.0f);	
 	plane->renderMode = GL_TRIANGLE_STRIP;	
