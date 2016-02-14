@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 	texBoden.texFileName="res/laminat.bmp";	
 	texFliessen.texFileName = "res/fliessen.bmp";
 	texSteine.texFileName = "res/pflaster.bmp";
-	texSteineNorm.texFileName = "res/brick.bmp";
+	texSteineNorm.texFileName = "res/pflaster.bmp";
 	loadTexture(&texBoden);
 	loadTexture(&texFliessen);
 	loadTexture(&texSteine);

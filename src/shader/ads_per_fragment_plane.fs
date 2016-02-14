@@ -73,8 +73,8 @@ vec3 calcSphereReflection(vec3 vertex, vec3 sphere, vec3 light, vec3 s, vec3 c, 
 
 void main()
 {		
-	vec4 tex1 = texture2D(samp, textureCoords);
-	vec4 tex2 = texture2D(samp2, textureCoords);
+	vec4 tex1 = texture2D(samp, textureCoords*8.0);
+	vec4 tex2 = texture2D(samp2, textureCoords*8.0);
 	vec4 tex = mix(tex1,tex2,1.0);
 	vec4 spherePosition[4];
 	float c = 1.0;	

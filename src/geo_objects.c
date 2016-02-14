@@ -163,10 +163,10 @@ void initPlane(RenderObject *plane, ShaderProgram sp)
 			 	 0.0f, 1.0f,  0.0f,
 				 0.0f, 1.0f,  0.0f};
 
-	GLfloat texCoords[] = {	0.0f, 8.0f,
-				8.0f, 8.0f,
+	GLfloat texCoords[] = {	0.0f, 1.0f,
+				1.0f, 1.0f,
 				0.0f, 0.0f,
-				8.0f, 0.0f};
+				1.0f, 0.0f};
 	GLuint indices[] = {0,1,2,3};
 	
 	plane->vertices = vertices;
