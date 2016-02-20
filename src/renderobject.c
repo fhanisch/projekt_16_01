@@ -139,18 +139,11 @@ void genShaderPrograms()
 	normal_mapping_sp = createShaderProgram(normal_mapping_vs, normal_mapping_fs);
 }
 
-void createVBO(GLuint *vboID, GLuint verticesSize, GLfloat *vertices)
+void createVBO(GLenum bufferType, GLuint *bufferID, GLuint bufferSize, GLfloat *buffer)
 {	
-	glGenBuffers(1,vboID);
-	glBindBuffer(GL_ARRAY_BUFFER, *vboID);
-	glBufferData(GL_ARRAY_BUFFER, verticesSize, vertices, GL_STATIC_DRAW);
-}
-
-void createIBO(GLuint *iboID, GLuint indicesSize, GLuint *indices)
-{	
-	glGenBuffers(1,iboID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *iboID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, indices, GL_STATIC_DRAW);	
+	glGenBuffers(1,bufferID);
+	glBindBuffer(bufferType, *bufferID);
+	glBufferData(bufferType, bufferSize, buffer, GL_STATIC_DRAW);
 }
 
 Color getColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
@@ -362,11 +355,11 @@ void genMeshGridObject(MeshGridObject *meshGridObj)
 {
 	createMeshGrid(&meshGridObj->u, &meshGridObj->v, &meshGridObj->uSize, &meshGridObj->vSize, 100, 100);
 	createMeshGridIndices(&meshGridObj->indices, &meshGridObj->indicesLen, &meshGridObj->indicesSize, 100, 100);
-	createVBO(&meshGridObj->uID,meshGridObj->uSize,meshGridObj->u);
+	createVBO(GL_ARRAY_BUFFER, &meshGridObj->uID,meshGridObj->uSize,meshGridObj->u);
 	printf("uID: %i\n",meshGridObj->uID);	
-	createVBO(&meshGridObj->vID,meshGridObj->vSize,meshGridObj->v);
+	createVBO(GL_ARRAY_BUFFER, &meshGridObj->vID,meshGridObj->vSize,meshGridObj->v);
 	printf("vID: %i\n",meshGridObj->vID);	
-	createIBO(&meshGridObj->iboID, meshGridObj->indicesSize, meshGridObj->indices);
+	createVBO(GL_ELEMENT_ARRAY_BUFFER, &meshGridObj->iboID, meshGridObj->indicesSize, (GLfloat*)meshGridObj->indices);
 	printf("iboID: %i\n",meshGridObj->iboID);	
 }
 
@@ -374,42 +367,42 @@ void initObj(RenderObject *r)
 {	
 	if (r->vertices!=NULL)	
 	{
-		createVBO(&r->vboID,r->verticesSize,r->vertices);
+		createVBO(GL_ARRAY_BUFFER, &r->vboID,r->verticesSize,r->vertices);
 		printf("vboID: %i\n",r->vboID);
 		printf("Size of Vertices: %d\n",r->verticesSize);
 	}
 
 	if (r->u!=NULL)
 	{
-		createVBO(&r->uID,r->uSize,r->u);
+		createVBO(GL_ARRAY_BUFFER, &r->uID,r->uSize,r->u);
 		printf("uID: %i\n",r->uID);
 		printf("Size of u: %d\n",r->uSize);		
 	}
 
 	if (r->v!=NULL)
 	{
-		createVBO(&r->vID,r->vSize,r->v);
+		createVBO(GL_ARRAY_BUFFER, &r->vID,r->vSize,r->v);
 		printf("vID: %i\n",r->vID);
 		printf("Size of v: %d\n",r->vSize);		
 	}
 
 	if (r->normals!=NULL)
 	{
-		createVBO(&r->nboID, r->normalsSize, r->normals);
+		createVBO(GL_ARRAY_BUFFER, &r->nboID, r->normalsSize, r->normals);
 		printf("nboID: %i\n",r->nboID);
 		printf("Size of normals: %d\n",r->normalsSize);
 	}
 
 	if (r->texCoords!=NULL)
 	{
-		createVBO(&r->tcoID, r->texCoordsSize, r->texCoords);
+		createVBO(GL_ARRAY_BUFFER, &r->tcoID, r->texCoordsSize, r->texCoords);
 		printf("tcoID: %i\n",r->tcoID);
 		printf("Size of texCoords: %d\n",r->texCoordsSize);
 	}
 
 	if (r->indices!=NULL)
 	{
-		createIBO(&r->iboID, r->indicesSize, r->indices);
+		createVBO(GL_ELEMENT_ARRAY_BUFFER, &r->iboID, r->indicesSize, (GLfloat*)r->indices);
 		printf("iboID: %i\n",r->iboID);
 		printf("Size of Indices: %d\n",r->indicesSize);
 	}

@@ -8,7 +8,7 @@ LIB = -lSDL -lGL -lGLEW -lm
 OBJ = build/main.o build/renderobject.o build/geo_objects.o
 
 projekt_16_01: $(OBJ)
-	$(CC) -o projekt_16_01 $(OBJ) $(LIB)
+	$(CC) -o $@ $(OBJ) $(LIB)
 
 build/main.o: src/main.c src/renderobject.h
 	$(CC) -c src/main.c -o $@
