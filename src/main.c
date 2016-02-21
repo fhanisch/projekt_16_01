@@ -33,7 +33,7 @@ int initOpenGLWindow(char *wndName)
 int main(int argc, char **argv)
 {
 	int quit = 0;
-	unsigned int key[256];
+	unsigned int key[512];
 	unsigned int F1=1;
 	int mouseX = 0;
 	int mouseY = 0;
